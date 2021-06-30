@@ -1,0 +1,42 @@
+-----------------------------------------------------------------------------------------------------------------
+the LAr.C script:
+ can be used ....
+ Formulas and numbers are based on the following article:
+ "Index of refraction, Rayleigh scattering length, and Sellmeier coefficients
+in solid and liquid argon and xenon"
+ arXiv:1502.04213
+ and private communication with one of the authors Emily Grace:
+ emilygrace.k@gmail.com
+
+ to run the script from the root command line do:
+ root [0] .L LAr.C++
+ root [1] init();                          initialize
+ to make some plots do:
+ root [2] sellmeierLAr();                 // plot refraction index between 110 and 700 nm
+ root [3] sellmeierLAr(125.,130.);        // plot refraction index between 125 and 130 nm
+ root [4] rayleigh();                     // plot rayleigh length between 110 and 400 nm
+ root [5] rayleigh(125,130);              // plot rayleigh length between 110 and 400 nm
+
+ to print out a table that can be cut and paste into the Geant4 gdml description:
+ root [6] rindextable();                   // refraction index between 110 and 700 nm in nsteps=100 for T=83.81 K
+ root [7] rindextable(200,300,10,3);       // refraction index between 200 and 300 nm in nsteps=10 for T=90 K
+ root [8] rayleightable();                 // rayleigh length between 110 and 700 nm in nsteps=100 for T=83.81 K
+ root [9] rayleightable(200,300,10,3);     // rayleigh length between 200 and 300 nm in nsteps=10 for T=90 K
+
+ scintillation emmission spectrum 
+root [3] spectrum()
+root [4] spectrumE()
+
+-----------------------------------------------------------------------------------------------------------------
+The wls.C: script can be used to plot and fit the  quantum efficiency of TPB which is a wavelength shifter used in many
+experiments based on liquid Argon TPCs. The value have been extracted from the following article: 
+
+"Measurements of the intrinsic quantum efficiency and absorption
+length of tetraphenyl butadiene thin films in the vacuum
+ultraviolet regime"
+Eur. Phys. J. C (2018) 78:329
+
+ to run the script from the root command line do:
+ 
+root [0] .L wls.C++
+root [1] wls()
