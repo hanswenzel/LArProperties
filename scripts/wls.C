@@ -5,6 +5,24 @@
 #include "TMath.h"
 #include "TAxis.h"
 #include <cmath>
+#include <iostream>
+const double c = 299792458.;         // speed of light in m/sec
+const double h = 4.13566743E-15;     // Planck constant in eVsec
+double lambdatoe(double lambda) {
+    // input   photon wavelength in nm 
+    // return  energy in eV
+    double E = (h * c) / (lambda * 1.e-9);
+    return E;
+}
+
+double etolambda(double E) {
+    // input  photon energy in eV
+    // return   wavelength in nm 
+    double lambda = (h * c) / (E * 1.e-9);
+    return lambda;
+}
+
+
 // Data from: 
 // Eur. Phys. J. C (2018) 78:329
 //
@@ -17,7 +35,7 @@ Double_t myfunction(Double_t *x, Double_t *par) {
 }
 
 void wls() {
-    double A = 0.782;
+    double A = 1;
     double alpha = 3.7e-2;
     double sig1 = 15.43;
     double mu1 = 418.1;
@@ -30,8 +48,40 @@ void wls() {
     tg1->GetYaxis()->SetTitle("Quantum efficiency Qeff");
     tg1->SetMinimum(0.);
     tg1->Draw();
-    //TF1 *f1 = new TF1("myfunc", myfunction, 370., 560., 6);
-    //f1->SetParameters(0.782, 3.7e-2, 15.43, 418.1, 9.72, 411.2);
-    //f1->SetParNames("A", "alpha", "sig1", "mu1", "sig2", "mu2");
+    cout <<tg1->Eval(420)<<endl;
+    /*
+    TF1 *f1 = new TF1("myfunc", myfunction, 370., 560., 6);
+    f1->SetParameters(A, alpha, sig1, mu1, sig2, mu1);
+    f1->SetParNames("A", "alpha", "sig1", "mu1", "sig2", "mu2");
     //f1->Draw("SAME");
+    tg1->Fit("f1");
+    f1->Draw("SAME");
+    */
+}
+//----------------------------------------------------------------------
+// function prints out the const rayleigh length in the geant 4 gdml format
+// emin and emax in nm
+// nsteps number of steps
+// index of Temperature Array
+//----------------------------------------------------------------------
+
+void wlstable(double emin = 370, double emax = 560, int nsteps = 100) {
+    const double minlambda = 360;
+    const double maxlambda = 570;
+    if (emin < minlambda || emax > maxlambda) {
+        cout << " variables out of range: " << minlambda << " - " << maxlambda << endl;
+        return;
+    }
+    TGraph* tg1 = new TGraph("FitReemissionSpect.csv", "%lf,%lf");		 
+    double stepsize = (emax - emin) / nsteps;
+    double pe = emax;
+    double photone = lambdatoe(pe);
+    cout << "     <matrix name=\"EMISSION\" coldim=\"2\" values=\"" << endl;
+    for (int i = 1; i < nsteps; i++) {
+        pe = emax - i*stepsize;
+        photone = lambdatoe(pe);     // Photon energy in eV
+	tg1->Eval(pe);
+        cout << photone << "*eV "<<tg1->Eval(pe) << endl;
+    }  
+    cout <<  "\"/>" << endl;
 }

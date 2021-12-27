@@ -4,7 +4,7 @@
 % data according to the instructions in PoSauthmanual.pdf
 \documentclass[a4paper]{jpconf}
 \usepackage{graphicx}
-
+\usepackage{epstopdf} 
 \begin{document}
 
 \title{Liquid Argon optical properties to be used in Geant4 and Opticks Simulations}
@@ -19,42 +19,58 @@ USA}
 \begin{abstract}
   In Geant4 and Opticks optical properties like e.g. the materials refractive
   index are inputs that have to be provided. In this paper we collect the
-  optical properties relevant for liquid Argon TPC's.  
+  optical properties relevant for liquid Argon TPC's.   
 \end{abstract}
 
 \section{Introduction}
-optical properties given as
-\begin{verbatim}
-Light yield ~ few 10,000’s of photons per MeV (depends on E field, particle type and purity)
+  In Geant4 and Opticks optical properties like e.g. the materials refractive
+  index are inputs that have to be provided. In this article we briefly describe the physical processes relevant to the
+  production, transport and detection of optical photons in liquid Argon. We collect the
+  values and parameterizations of optical properties relevant for liquid Argon TPC's. We provide scripts that plot this quantities and that convert this values
+  into a gdml description that can be directly used in the Geant4 Detector description.
+  
+  \section{Scintillation Properties of liquid Argon}
+  Light yield ~ few 10,000’s of photons per MeV (depends on E field, particle type and purity)
 (SCINTILLATIONYIELD: 50000/MeV when no electric field present)
-Wavelength of emission is 128nm (FWHM= 10nm)
-
-Light with two characteristic time constants:
-- fast component  (SCINTILLATIONTIMECONSTANT1): 6 ns  
-  	     	              (SCINTILLATIONYIELD1): 0.75
-
-- slow component (SCINTILLATIONTIMECONSTANT2): 1500 ns
-				 (SCINTILLATIONYIELD2): 0.25
-(RESOLUTIONSCALE): 1
-
+  \begin{table}[h!]
+  \begin{center}
+    \label{tab:table1}
+    \begin{tabular}{|l|c|} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+      \hline
+      \textbf{Property} &       \textbf{value}\\
+      \hline
+      SCINTILLATIONYIELD & 50000 photons/MeV (when no electric field present)\\
+      Wavelength of emission &  128nm (FWHM= 10nm)\\
+      fast component  (SCINTILLATIONTIMECONSTANT1)& 6 ns\\  
+      (SCINTILLATIONYIELD1)& 0.75 \\
+      slow component (SCINTILLATIONTIMECONSTANT2)& 1500 ns \\
+      (SCINTILLATIONYIELD2)& 0.25\\
+      (RESOLUTIONSCALE)& 1\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Scintillation Properties of liquid Argon.}
+  \end{table}
+  
+\section{Cerenkov spectrum and Yield}
+\section{Optical Properties of liquid Argon}
+\subsection{Refraction Index of liquid Argon}
 Refraction Index: n = 1.358 ± 0.003 at 128 nm (M. Babicz et al 2020 JINST 15 P09009)
                             ( compared to n= 1.45 ± 0.07 (ArXiv:1502.04213))
 Group velocity: 1/ vg = 7.46 ± 0.08 ns/m at 128 nm
 
+\subsection{Absorption length of liquid Argon}
 Argon is highly transparent to its own scintillation light. (ABSLENGTH)
   >1.1 m (ArXiv:1511.07725) 
-Rayleigh scattering length (RAYLEIGH): 90 cm (M. Babicz et al 2020 JINST 15 P09009)
+  \subsection{Rayleigh Scattering length of liquid Argon}
+  Rayleigh scattering length (RAYLEIGH): 90 cm (M. Babicz et al 2020 JINST 15 P09009)
                                                                 55+/- 5 cm (ArXiv:1502.04213)
-
-\end{verbatim}
-
-
-
-\section{Requirements}
+\subsection{ quantum efficiency and absorption length of tetraphenyl butadiene thin films}
+\cite{ref:wls}
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=35.5pc]{wls.epsf}
+\includegraphics[width=35.5pc]{wls.pdf}
 \end{center}
 \caption{\label{fig1}wave length spectrum.}
 \end{figure}
@@ -62,43 +78,26 @@ Rayleigh scattering length (RAYLEIGH): 90 cm (M. Babicz et al 2020 JINST 15 P090
 
 
 \section{Conclusions and Outlook}
-DoSSiER provides a repository to collect and organize validation and regression test results and
-the experimental data used for physics validation tests. The  web application component of DoSSiER allows easy access 
-to the information for members of simulation collaborations and the general user community. 
-The  web service component allows for programmatic access to the data
-stored in DoSSiER.\@ 
-We are in the process of adding new tests and experimental data to the repository. 
-Originally we concentrated on Geant4 tests of hadronic and electromagnetic physics that are of interest for high energy physics 
-experiments, but in the future we plan to include tests that are of interest in other areas such as medical and space science. Also
-we are in the process of adding GEANIE and GeantV data in cooperation with the respective collaborations.
-The website front-page (currently reachable at
-\verb"http://g4devel.fnal.gov:8080/DoSSiER/") is already available to
-the general public interested in providing feedback. 
-Additional data-sets and simulation results are
-expected in the near future and we plan to improve the website
-based on the comments of the first users in the next few years, the
-current priority being the extension of included simulations and data.
-With the
-addition of more data we expect that this tool will become the
-main entry point to serve as result repository for both higher level
-(e.g.\@ shower shapes in calorimeters) and microscopic (e.g.\@
-cross-sections, final state multiplicities) validations. To achieve this
-goal we are working in close collaboration with simulation experts. 
+
  \section*{References}
 
-\begin{thebibliography}{99}
+ \begin{thebibliography}{99}
+ \bibitem{ref:LArProperties}
+   https://github.com/hanswenzel/LArProperties
+ \bibitem{ref:CaTS}
+   https://github.com/hanswenzel/CaTS
 \bibitem{ref:Geant4-4}
  Allison J et al. 2016 {\it Nuclear Instruments and Methods in Physics
                 Research A} {\bf 835} (186--225).
 \bibitem{ref:GeantV}
  \verb|http://geant.cern.ch/|.
-\bibitem{inspire} High-Energy Physics Literature Database,
+\bibitem{ref:inspire} High-Energy Physics Literature Database,
   \verb"http://inspirehep.net"/.
 \bibitem{scripts}  
   \verb''https://github.com/hanswenzel/CaTS/tree/master/scripts/LAr.C''/.
   \verb''https://github.com/hanswenzel/CaTS/tree/master/scripts/wls.C''/.
 
-\bibitem{wls} Christopher Benson, Gabriel D. Orebi Gann, Victor Gehman
+\bibitem{ref:wls} Christopher Benson, Gabriel D. Orebi Gann, Victor Gehman
   {\it Measurements of the intrinsic quantum efficiency and absorption
       length of tetraphenyl butadiene thin films in the vacuum
       ultraviolet regime}
