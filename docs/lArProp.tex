@@ -28,8 +28,8 @@ USA}
   production, transport and detection of optical photons in liquid Argon. We collect the
   values and parameterizations of optical properties relevant for liquid Argon TPC's. We provide scripts that plot this quantities and that convert this values
   into a gdml description that can be directly used in the Geant4 Detector description.
-  
-  \section{Scintillation Properties of liquid Argon}
+  \section{Light production}  
+  \subsection{Scintillation Properties of liquid Argon}
   Light yield ~ few 10,000’s of photons per MeV (depends on E field, particle type and purity)
 (SCINTILLATIONYIELD: 50000/MeV when no electric field present)
   \begin{table}[h!]
@@ -37,45 +37,76 @@ USA}
     \label{tab:table1}
     \begin{tabular}{|l|c|} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
       \hline
-      \textbf{Property} &       \textbf{value}\\
+      \textbf{Property/Geant4 property} &       \textbf{value}\\
       \hline
-      SCINTILLATIONYIELD & 50000 photons/MeV (when no electric field present)\\
-      Wavelength of emission &  128nm (FWHM= 10nm)\\
-      fast component  (SCINTILLATIONTIMECONSTANT1)& 6 ns\\  
-      (SCINTILLATIONYIELD1)& 0.75 \\
-      slow component (SCINTILLATIONTIMECONSTANT2)& 1500 ns \\
-      (SCINTILLATIONYIELD2)& 0.25\\
-      (RESOLUTIONSCALE)& 1\\
+      yield/SCINTILLATIONYIELD & 50000 photons/MeV (no electric field)\\
+      Wavelength of emission &  128nm (FWHM=10nm)\\
+      fast component/SCINTILLATIONTIMECONSTANT1& 6 ns\\  
+      fast fraction/SCINTILLATIONYIELD1& 0.75 \\
+      slow component/SCINTILLATIONTIMECONSTANT2& 1500 ns \\
+      slow fraction/SCINTILLATIONYIELD2& 0.25\\
+      RESOLUTIONSCALE& 1\\
       \hline
     \end{tabular}
   \end{center}
   \caption{Scintillation Properties of liquid Argon.}
   \end{table}
-  
-\section{Cerenkov spectrum and Yield}
-\section{Optical Properties of liquid Argon}
+
+\subsection{Cerenkov spectrum and Yield}
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{spectrum.pdf}
+%  \captionof{figure}{A figure}
+%  \label{fig:spectrum}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{spectrumE.pdf}
+%  \captionof{figure}{Another figure}
+%  \label{fig:spectrumE}
+\end{minipage}
+\caption{\label{fig:spectrum}Scintillation emmission spectrum.}
+\end{figure}
+
+\section{Light propagation}
 \subsection{Refraction Index of liquid Argon}
 Refraction Index: n = 1.358 ± 0.003 at 128 nm (M. Babicz et al 2020 JINST 15 P09009)
                             ( compared to n= 1.45 ± 0.07 (ArXiv:1502.04213))
 Group velocity: 1/ vg = 7.46 ± 0.08 ns/m at 128 nm
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=35.5pc]{sellmeier.pdf}
+\end{center}
+\caption{\label{fig:sellmeier.pdf}refraction index}
+\end{figure}
 
 \subsection{Absorption length of liquid Argon}
 Argon is highly transparent to its own scintillation light. (ABSLENGTH)
   >1.1 m (ArXiv:1511.07725) 
   \subsection{Rayleigh Scattering length of liquid Argon}
   Rayleigh scattering length (RAYLEIGH): 90 cm (M. Babicz et al 2020 JINST 15 P09009)
-                                                                55+/- 5 cm (ArXiv:1502.04213)
-\subsection{ quantum efficiency and absorption length of tetraphenyl butadiene thin films}
+  55+/- 5 cm (ArXiv:1502.04213)
+
+  \begin{figure}[ht]
+    \begin{center}
+      \includegraphics[width=35.5pc]{rayleigh.pdf}
+    \end{center}
+    \caption{\label{fig:rayleigh}rayleigh scattering length.}
+  \end{figure}
+  
+\section{rayleigh scattering length.}
 \cite{ref:wls}
 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=35.5pc]{wls.pdf}
 \end{center}
-\caption{\label{fig1}wave length spectrum.}
+\caption{\label{fig:wls}wave length spectrum.}
 \end{figure}
 
-
+\section{Quantum efficiency and absorption length of the tetraphenyl butadiene wave length shifter}
 
 \section{Conclusions and Outlook}
 
