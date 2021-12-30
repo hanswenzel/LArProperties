@@ -28,6 +28,16 @@ USA}
   production, transport and detection of optical photons in liquid Argon. We collect the
   values and parameterizations of optical properties relevant for liquid Argon TPC's. We provide scripts that plot this quantities and that convert this values
   into a gdml description that can be directly used in the Geant4 Detector description.
+  All values are summarized in the file material.xml which can be found in the github repository \cite{ref:scripts}.
+  Usually quantities are given as a funcyion of photon wavelength but Geant4 requires the photon energy.
+  
+\begin{equation}
+  E_{\gamma} = \frac{h * c}{\lambda_{\gamma} * 1.e-9}
+  \label{equ:equation1}
+\end{equation}
+  const double c = 299792458.;         // speed of light in m/sec
+  const double h = 4.13566743E-15;     // Planck constant in eVsec
+  
   \section{Light production}  
   \subsection{Scintillation Properties of liquid Argon}
   Light yield ~ few 10,000’s of photons per MeV (depends on E field, particle type and purity)
@@ -72,9 +82,20 @@ USA}
 
 \section{Light propagation}
 \subsection{Refraction Index of liquid Argon}
-Refraction Index: n = 1.358 ± 0.003 at 128 nm (M. Babicz et al 2020 JINST 15 P09009)
-                            ( compared to n= 1.45 ± 0.07 (ArXiv:1502.04213))
-Group velocity: 1/ vg = 7.46 ± 0.08 ns/m at 128 nm
+\begin{equation}
+  v_g (\lambda)= \frac{c}{n-\lambda \frac{\partial{n}}{\partial{\lambda}}}
+      \label{equ:vgroup}
+% \caption{relation between refraction index and group velocity.}       
+\end{equation}
+Refraction Index: $n = 1.358 \pm 0.003 at 128 nm$ (M. Babicz et al 2020 JINST 15 P09009)
+                            ( compared to $n= 1.45 \pm 0.07$ (ArXiv:1502.04213))
+Group velocity: $1/ vg = 7.46 \pm 0.08 ns/m at 128 nm$
+\begin{equation}
+n^2 = a_0 + \frac{a_{UV} \lambda^2}{\lambda^2 -\lambda^2_{UV}}+\frac{a_{IR}\lambda^2}{\lambda^2 - \lambda^2_{IR}}.
+ \label{equ:sellmeier}
+\end{equation}
+
+% \caption{relation between refraction index and group velocity.} 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=35.5pc]{sellmeier.pdf}
@@ -82,12 +103,12 @@ Group velocity: 1/ vg = 7.46 ± 0.08 ns/m at 128 nm
 \caption{\label{fig:sellmeier.pdf}refraction index}
 \end{figure}
 
-\subsection{Absorption length of liquid Argon}
+\subsection{Absorption length}
 Argon is highly transparent to its own scintillation light. (ABSLENGTH)
-  >1.1 m (ArXiv:1511.07725) 
-  \subsection{Rayleigh Scattering length of liquid Argon}
+  $> 1.1 m$  (ArXiv:1511.07725) 
+  \subsection{Rayleigh Scattering length}
   Rayleigh scattering length (RAYLEIGH): 90 cm (M. Babicz et al 2020 JINST 15 P09009)
-  55+/- 5 cm (ArXiv:1502.04213)
+  $55\pm  5 cm$ (ArXiv:1502.04213)
 
   \begin{figure}[ht]
     \begin{center}
@@ -96,14 +117,15 @@ Argon is highly transparent to its own scintillation light. (ABSLENGTH)
     \caption{\label{fig:rayleigh}rayleigh scattering length.}
   \end{figure}
   
-\section{rayleigh scattering length.}
+  \section{Photon Detection}
+  
+\subsection{Quantum efficiency and absorption length of the tetraphenyl butadiene wave length shifter}
 \cite{ref:wls}
-
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=35.5pc]{wls.pdf}
 \end{center}
-\caption{\label{fig:wls}wave length spectrum.}
+\caption{\label{fig:wls}wave length spectrum extracted form \cite{ref:wls}.}
 \end{figure}
 
 \section{Quantum efficiency and absorption length of the tetraphenyl butadiene wave length shifter}
@@ -114,39 +136,39 @@ Argon is highly transparent to its own scintillation light. (ABSLENGTH)
 
  \begin{thebibliography}{99}
  \bibitem{ref:LArProperties}
-   https://github.com/hanswenzel/LArProperties
+   \verb|https://github.com/hanswenzel/LArProperties|.
  \bibitem{ref:CaTS}
-   https://github.com/hanswenzel/CaTS
+   \verb|https://github.com/hanswenzel/CaTS|.
 \bibitem{ref:Geant4-4}
- Allison J et al. 2016 {\it Nuclear Instruments and Methods in Physics
+ Allison J et al. 2016, {\it Nuclear Instruments and Methods in Physics
                 Research A} {\bf 835} (186--225).
-\bibitem{ref:GeantV}
+\bibitem{ref:Geant4}
  \verb|http://geant.cern.ch/|.
 \bibitem{ref:inspire} High-Energy Physics Literature Database,
   \verb"http://inspirehep.net"/.
-\bibitem{scripts}  
-  \verb''https://github.com/hanswenzel/CaTS/tree/master/scripts/LAr.C''/.
-  \verb''https://github.com/hanswenzel/CaTS/tree/master/scripts/wls.C''/.
+\bibitem{ref:scripts}  
+  \verb|https://github.com/hanswenzel/CaTS/tree/master/scripts/LAr.C|.\\
+  \verb|https://github.com/hanswenzel/CaTS/tree/master/scripts/wls.C|.
 
-\bibitem{ref:wls} Christopher Benson, Gabriel D. Orebi Gann, Victor Gehman
+\bibitem{ref:wls} Christopher Benson, Gabriel D. Orebi Gann, Victor Gehman,\\
   {\it Measurements of the intrinsic quantum efficiency and absorption
       length of tetraphenyl butadiene thin films in the vacuum
-      ultraviolet regime}
+      ultraviolet regime.}\\
 Eur. Phys. J. C (2018) 78:329
-\bibitem{grace}Emily Grace, Alistair Butcher, Jocelyn Monroe, James A. Nikkel
-  \it{Index of refraction, Rayleigh scattering length, and Sellmeier coefficients in solid and liquid argon and xenon}
-  \verb'' ArXiv:1502.04213''/
+\bibitem{grace}Emily Grace, Alistair Butcher, Jocelyn Monroe, James A. Nikkel,\\
+  \it{Index of refraction, Rayleigh scattering length, and Sellmeier coefficients in solid and liquid argon and xenon.}\\
+  \verb|ArXiv:1502.04213|
 \bibitem{gv} 
   \it{A measurement of the group velocity of scintillation light in liquid argon}
   M. Babicz et al 2020 JINST 15 P09009
 \bibitem{ben}
   Ben Jones, \it{Introduction to Scintillation Light in Liquid Argon}
   \verb''http://microboone-exp.fnal.gov''/
-  \bibitem{morikawa}E. Morikawa, R. Reininger, P. Gürtler, V. Saile, and P. Laporte
+  \bibitem{morikawa}E. Morikawa, R. Reininger, P. Gürtler, V. Saile, and P. Laporte,\\
 \it{Argon, krypton, and xenon excimer luminescence: From the dilute gas to the
-condensed phase}
+condensed phase.}\\
 J. Chem. Phys. 91, 1469 (1989);
-  \verb''https://doi.org/10.1063/1.457108''/
+  \verb|https://doi.org/10.1063/1.457108|
 
 
   
