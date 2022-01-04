@@ -2,6 +2,8 @@
 % invitation-to-submit email, where your data are already
 % filled in. Otherwise please make sure you insert your
 % data according to the instructions in PoSauthmanual.pdf
+%\documentclass[article]
+%{jpconf}
 \documentclass[a4paper]{jpconf}
 \usepackage{graphicx}
 \usepackage{epstopdf} 
@@ -21,7 +23,7 @@ USA}
   index are inputs that have to be provided. In this paper we collect the
   optical properties relevant for liquid Argon TPC's.   
 \end{abstract}
-
+%\tableofcontents
 \section{Introduction}
   In Geant4 and Opticks optical properties like e.g. the materials refractive
   index are inputs that have to be provided when the detector is constructed. In this article we briefly
@@ -31,7 +33,12 @@ USA}
   into a gdml description that can be directly used in the Geant4 Detector description.
   All values are summarized in the file material.xml which can be found in the github repository \cite{ref:scripts}.
   Usually quantities are given as a function of photon wavelength but Geant4 requires the photon energy.
-  
+  The motion of the charged particles liberates
+charge from the surrounding argon (ionization) and
+produces light (scintillation)
+
+
+
 \begin{equation}
   E_{\gamma}(eV) = \frac{h  c}{\lambda_{\gamma}  10^{-9}}
   \label{equ:equation1}
@@ -40,11 +47,20 @@ USA}
     with:\\
   speed of light: $c = 299792458 m/sec$\\
   Planck constant: $h = 4.13566743\times10^{-15} eV/sec$\\
+  \clearpage
   \section{Light production}  
   \subsection{Scintillation Properties of liquid Argon}
 
   Efficient scintilator with typical Light yields in the order of a few 10,000’s of photons per $MeV$  deposited (depends on E field, particle type and purity)
-(SCINTILLATIONYIELD: $50000/MeV$ when no electric field present)
+  (SCINTILLATIONYIELD: $50000/MeV$ when no electric field present)
+Scintillation yield is E-field and particle
+dependent. For a proton:
+24,000 photons / MeV, E = 500 V / cm
+40,000 photons / MeV, E = 0 V / cm
+  
+  Liquid argon produces scintillation light via two distinct scintilation mechanisms, each
+  of which has a different characteristic time constant
+  
   \begin{table}[h!]
   \begin{center}
     \label{tab:table1}
@@ -52,7 +68,7 @@ USA}
       \hline
       \textbf{Property/Geant4 keyword} &       \textbf{value}\\
       \hline
-      yield/SCINTILLATIONYIELD & $50000 photons/MeV$ (no electric field)\\
+      yield/SCINTILLATIONYIELD & $50000 \gamma 's/MeV$ (no electric field)\\
       Wavelength of emission &  $128nm$ ($FWHM=10nm$)\\
       fast component/SCINTILLATIONTIMECONSTANT1& $6 ns$\\  
       fast fraction/SCINTILLATIONYIELD1& $0.75$ \\
@@ -65,7 +81,7 @@ USA}
   \caption{Scintillation Properties of liquid Argon.}
   \end{table}
 
-
+Scintillation Quenching,  Birks 
 \begin{figure}
 \centering
 \begin{minipage}{.5\textwidth}
@@ -84,17 +100,28 @@ USA}
 \end{figure}
 
 \subsection{Cerenkov spectrum and Yield}
-the particle (red arrow) travels in a medium with speed $v_p$  such that
+A charged particle radiates if its speed is greater than the local phase speed of light $v_p$
+In Geant4 the process is not contributing to energy loss.
+
+the charged particle travels in a medium with speed $v_p$  such that
 $\frac{c}{n} < v_p < c$.
-
-
-\section{Light propagation}
-\subsection{Refraction Index of liquid Argon}
 \begin{equation}
-  v_g (\lambda)= \frac{c}{n-\lambda \frac{\partial{n}}{\partial{\lambda}}}
-      \label{equ:vgroup}
-% \caption{relation between refraction index and group velocity.}       
+\cos(\theta_C)= \frac{1}{n \beta}
 \end{equation}
+\begin{equation}
+  \frac{d^2N}{dEdx} = \frac{2 \pi \alpha  z^2}  {\lambda^2} \left(1 - \frac{1}{(\beta^2 n^2(\lambda))}\right)
+\end{equation}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=35.5pc]{cerenkov.pdf}
+\end{center}
+\caption{\label{fig:cerenkov}Cerenkov spectrum}
+\end{figure}
+
+\clearpage
+\section{Light propagation}
+\subsection{Refraction Index and group velocity}
+
 Refraction Index: $n = 1.358 \pm 0.003$ at $128 nm$ \cite{ref:vg}.
                             ( compared to $n= 1.45 \pm 0.07$ \cite{ref:grace})
 Group velocity: $\frac{1}{vg} = 7.46 \pm 0.08 ns/m$ at $128 nm$
@@ -103,14 +130,62 @@ n^2 = a_0 + \frac{a_{UV} \lambda^2}{\lambda^2 -\lambda^2_{UV}}+\frac{a_{IR}\lamb
  \label{equ:sellmeier}
 \end{equation}
 
+ \begin{table}[h!]
+  \begin{center}
+    \label{tab:table1}
+    \begin{tabular}{|c|c|c|} 
+      \hline
+       Scintilation $\lambda$ & UV Resonance $\lambda$ &IR Resonance $\lambda$\\
+ (nm)           & (nm)          &(nm) \\
+      \hline
+128 & 106.6 &908.3\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{blabla bla.}
+ \end{table}
+ \begin{table}[h!]
+  \begin{center}
+    \label{tab:table1}
+    \begin{tabular}{|c|c|c|c|} 
+      \hline
+ $T (K) $& $a_0$ & $a_{UV}$ & $a_{IR}$ \\
+\hline
+      $83.81$ & $1.24\pm0.09$ & $0.27\pm0.09$ & $0.00047\pm0.007$ \\
+$90$ & $1.26\pm 0.09$& $0.23\pm 0.09$ & $0.0023\pm0.007$ \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Sellmeier coefficents}
+ \end{table}
+ 
+where the parameters $a_0$ , $a_{UV}$ and $a_{IR}$ known as Sellmeier coefficients have to be determined
+experimentally.
+ 
+ The relation between group velocity and the refraction index is given by:
+
+\begin{equation}
+  v_g (\lambda)= \frac{c}{n-\lambda \frac{\partial{n}}{\partial{\lambda}}}
+      \label{equ:vgroup}
+% \caption{relation between refraction index and group velocity.}       
+\end{equation}
+
+ 
+
+
 % \caption{relation between refraction index and group velocity.} 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=35.5pc]{sellmeier.pdf}
 \end{center}
-\caption{\label{fig:sellmeier.pdf}refraction index}
+\caption{\label{fig:sellmeier}refraction index}
 \end{figure}
-
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=35.5pc]{vg.pdf}
+\end{center}
+\caption{\label{fig:vg}group velocity}
+\end{figure}
 \subsection{Absorption length}
 Argon is highly transparent to its own scintillation light. (ABSLENGTH)
   $> 1.1 m$  (ArXiv:1511.07725) 
@@ -118,13 +193,34 @@ Argon is highly transparent to its own scintillation light. (ABSLENGTH)
   Rayleigh scattering length (RAYLEIGH). In the literature one can find the following values at $128 nm$:  90 cm \cite{ref:vg}
   and $55\pm  5 cm$ \cite{ref:grace}.
 
+  \begin{equation}
+l^{-1} = \frac{16\pi^3}{6\lambda^4} \left[ kT \rho^2 k_T \left( \frac{(n^2 - 1)(n^2 + 2)}{3} \right)^2\right]
+  \label{equ:rayleigh}
+\end{equation}
+\noindent
+    with:\\
+  speed of light: $c = 299792458 m/sec$\\
+  Planck constant: $h = 4.13566743\times10^{-15} eV/sec$\\
+
+  
   \begin{figure}[ht]
     \begin{center}
       \includegraphics[width=35.5pc]{rayleigh.pdf}
     \end{center}
     \caption{\label{fig:rayleigh}rayleigh scattering length.}
   \end{figure}
+  \subsection{reflection}
+  \begin{itemize}
+\item   n which waves arriving at the interface (boundary) from one medium to another
+  The Fresnel equations (or Fresnel coefficients) describe the reflection and transmission of light (or electromagnetic radiation in general) when incident on an interface between different optical media.(boundary between liqid Ar and wls, wls and
+  photodetector.)
   
+\item Specular reflection, or regular reflection, is the mirror-like reflection of waves, such as light, from a surface.[1]
+  The law of reflection states that a reflected ray of light emerges from the reflecting surface at the same angle to the surface normal as the incident ray, but on the opposing side of the surface normal in the plane formed by the incident and reflected rays.
+  (boundary between liquid  Argon and metal walls of cryogenic vessel)
+
+  \end{itemize}
+  \clearpage
   \section{Photon Detection}
 \subsection{Quantum efficiency and absorption length of the tetraphenyl butadiene wave length shifter}
 \cite{ref:wls}
@@ -136,7 +232,7 @@ Argon is highly transparent to its own scintillation light. (ABSLENGTH)
 \end{figure}
 
 \section{Conclusions and Outlook}
-
+\clearpage
  \section*{References}
 
  \begin{thebibliography}{99}
@@ -163,7 +259,7 @@ Eur. Phys. J. C (2018) 78:329
 \bibitem{ref:grace}Emily Grace, Alistair Butcher, Jocelyn Monroe, James A. Nikkel,\\
   \it{Index of refraction, Rayleigh scattering length, and Sellmeier coefficients in solid and liquid argon and xenon.}\\
   \verb|ArXiv:1502.04213|
-\bibitem{ref:gv} 
+\bibitem{ref:vg} 
   \it{A measurement of the group velocity of scintillation light in liquid argon},
   M. Babicz et al, 2020 JINST 15 P09009
 \bibitem{ben}
