@@ -59,8 +59,9 @@ dependent. For a proton:
 40,000 photons / MeV, E = 0 V / cm
   
   Liquid argon produces scintillation light via two distinct scintilation mechanisms, each
-  of which has a different characteristic time constant
-  
+  of which has a different characteristic time constant. The emmission spectra (Geant4 keywords: SCINTILLATIONCOMPONENT1,SCINTILLATIONCOMPONENT2) are passed to Geant4
+  as a 2 column matrix where the first column is the photon energy and the second is the value.
+
   \begin{table}[h!]
   \begin{center}
     \label{tab:table1}
@@ -69,7 +70,8 @@ dependent. For a proton:
       \textbf{Property/Geant4 keyword} &       \textbf{value}\\
       \hline
       yield/SCINTILLATIONYIELD & $50000 \gamma 's/MeV$ (no electric field)\\
-      Wavelength of emission &  $128nm$ ($FWHM=10nm$)\\
+      Wavelength of emission/SCINTILLATIONCOMPONENT1 &  $128nm$ ($FWHM=10nm$)\\
+      Wavelength of emission/SCINTILLATIONCOMPONENT2 &  $128nm$ ($FWHM=10nm$)\\
       fast component/SCINTILLATIONTIMECONSTANT1& $6 ns$\\  
       fast fraction/SCINTILLATIONYIELD1& $0.75$ \\
       slow component/SCINTILLATIONTIMECONSTANT2& $1500 ns$ \\
@@ -81,7 +83,8 @@ dependent. For a proton:
   \caption{Scintillation Properties of liquid Argon.}
   \end{table}
 
-Scintillation Quenching,  Birks 
+  Scintillation Quenching,  Birks
+  
 \begin{figure}
 \centering
 \begin{minipage}{.5\textwidth}
@@ -105,6 +108,7 @@ In Geant4 the process is not contributing to energy loss.
 
 the charged particle travels in a medium with speed $v_p$  such that
 $\frac{c}{n} < v_p < c$.
+from \cite{ref:pdg}
 \begin{equation}
 \cos(\theta_C)= \frac{1}{n \beta}
 \end{equation}
@@ -120,11 +124,31 @@ $\frac{c}{n} < v_p < c$.
 
 \clearpage
 \section{Light propagation}
+In this section we discuss the material properties related to light propagation in a medium. The values are 
+passed to Geant4 as a 2 column matrix where the first column is the photon energy and the second is the value. 
+ 
+\begin{table}[h!]
+  \begin{center}
+    \label{tab:table1}
+    \begin{tabular}{|c|c|} 
+      \hline
+      optical material property & Geant4 Keyword\\
+      \hline
+      Refraction index as function of photon energy &RINDEX      \\
+      Absorption length as function of photon energy& ABSLENGTH   \\
+      Rayleigh scattering length as function of photon energy & RAYLEIGH    \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Material properties related to light propagation in a medium}
+ \end{table}
+
 \subsection{Refraction Index and group velocity}
 
-Refraction Index: $n = 1.358 \pm 0.003$ at $128 nm$ \cite{ref:vg}.
+In \cite{ref:vg} the refraction index and group velocity  at $128 nm$ are measured at $n = 1.358 \pm 0.003$ and $\frac{1}{vg} = 7.46 \pm 0.08 ns/m$.
                             ( compared to $n= 1.45 \pm 0.07$ \cite{ref:grace})
-Group velocity: $\frac{1}{vg} = 7.46 \pm 0.08 ns/m$ at $128 nm$
+
+The Sellmeier equation \ref{equ:sellmeier} below is an empirical relationship between refractive index and wavelength for a particular transparent medium.
 \begin{equation}
 n^2 = a_0 + \frac{a_{UV} \lambda^2}{\lambda^2 -\lambda^2_{UV}}+\frac{a_{IR}\lambda^2}{\lambda^2 - \lambda^2_{IR}}.
  \label{equ:sellmeier}
@@ -144,6 +168,7 @@ n^2 = a_0 + \frac{a_{UV} \lambda^2}{\lambda^2 -\lambda^2_{UV}}+\frac{a_{IR}\lamb
   \end{center}
   \caption{blabla bla.}
  \end{table}
+ 
  \begin{table}[h!]
   \begin{center}
     \label{tab:table1}
@@ -190,8 +215,9 @@ experimentally.
 Argon is highly transparent to its own scintillation light. (ABSLENGTH)
   $> 1.1 m$  (ArXiv:1511.07725) 
   \subsection{Rayleigh Scattering length}
-  Rayleigh scattering length (RAYLEIGH). In the literature one can find the following values at $128 nm$:  90 cm \cite{ref:vg}
-  and $55\pm  5 cm$ \cite{ref:grace}.
+  Rayleigh scattering length (RAYLEIGH). In the literature one can find the following calculated values at $128 nm$:  90 cm \cite{ref:vg}
+  and $55\pm  5 cm$ \cite{ref:grace}. The  range of values for the Rayleigh
+scattering length is due to the refraction index at 128nm  n input  to the \ref{equ:rayleigh} below:
 
   \begin{equation}
 l^{-1} = \frac{16\pi^3}{6\lambda^4} \left[ kT \rho^2 k_T \left( \frac{(n^2 - 1)(n^2 + 2)}{3} \right)^2\right]
@@ -199,8 +225,7 @@ l^{-1} = \frac{16\pi^3}{6\lambda^4} \left[ kT \rho^2 k_T \left( \frac{(n^2 - 1)(
 \end{equation}
 \noindent
     with:\\
-  speed of light: $c = 299792458 m/sec$\\
-  Planck constant: $h = 4.13566743\times10^{-15} eV/sec$\\
+
 
   
   \begin{figure}[ht]
@@ -209,20 +234,31 @@ l^{-1} = \frac{16\pi^3}{6\lambda^4} \left[ kT \rho^2 k_T \left( \frac{(n^2 - 1)(
     \end{center}
     \caption{\label{fig:rayleigh}rayleigh scattering length.}
   \end{figure}
-  \subsection{reflection}
-  \begin{itemize}
-\item   n which waves arriving at the interface (boundary) from one medium to another
+  \section{Boundary processes}
+  \subsection{Refraction and total internal reflection}
+In physics, refraction is the change in direction of a wave passing from one medium to another or from a gradual change in the medium.
+Total internal reflection is the optical phenomenon in which waves arriving at the interface (boundary) from one medium to another (e.g., from water to air) are not refracted into the second ("external") medium, but completely reflected back into the first ("internal") medium. It occurs when the second medium has a higher wave speed (lower refractive index) than the first, and the waves are incident at a sufficiently oblique angle on the interface.
+For light, refraction follows Snell's law, which states that, for a given pair of media, the ratio of the sines of the angle of incidence $\theta_1$ and angle of refraction $\theta_2$ is equal to the ratio of phase velocities (v1 / v2) in the two media, or equivalently, to the indices of refraction (n2 / n1) of the two media.
+
+  \begin{equation}
+    \frac{\sin \theta _{1}}{\sin \theta _{2}}=\frac{v_{1}}{v_{2}}=\frac {n_{2}}{n_{1}}
+  \label{equ:snell}
+\end{equation}
+    n which waves arriving at the interface (boundary) from one medium to another
   The Fresnel equations (or Fresnel coefficients) describe the reflection and transmission of light (or electromagnetic radiation in general) when incident on an interface between different optical media.(boundary between liqid Ar and wls, wls and
   photodetector.)
-  
-\item Specular reflection, or regular reflection, is the mirror-like reflection of waves, such as light, from a surface.[1]
+
+\subsection{reflection} 
+ Specular reflection, or regular reflection, is the mirror-like reflection of waves, such as light, from a surface.[1]
   The law of reflection states that a reflected ray of light emerges from the reflecting surface at the same angle to the surface normal as the incident ray, but on the opposing side of the surface normal in the plane formed by the incident and reflected rays.
   (boundary between liquid  Argon and metal walls of cryogenic vessel)
 
-  \end{itemize}
+
+
+  
   \clearpage
   \section{Photon Detection}
-\subsection{Quantum efficiency and absorption length of the tetraphenyl butadiene wave length shifter}
+\subsection{Quantum efficiency and absorption length of the tetraphenyl butadiene (TPB) wave length shifter}
 \cite{ref:wls}
 \begin{figure}[ht]
 \begin{center}
@@ -262,7 +298,7 @@ Eur. Phys. J. C (2018) 78:329
 \bibitem{ref:vg} 
   \it{A measurement of the group velocity of scintillation light in liquid argon},
   M. Babicz et al, 2020 JINST 15 P09009
-\bibitem{ben}
+\bibitem{ref:ben}
   Ben Jones, \it{Introduction to Scintillation Light in Liquid Argon}
   \verb''http://microboone-exp.fnal.gov''/
   \bibitem{morikawa}E. Morikawa, R. Reininger, P. Gürtler, V. Saile, and P. Laporte,\\
@@ -270,9 +306,9 @@ Eur. Phys. J. C (2018) 78:329
 condensed phase.}\\
 J. Chem. Phys. 91, 1469 (1989);
   \verb|https://doi.org/10.1063/1.457108|
-
-
-  
+\bibitem{ref:pdg}
+P.A. Zyla et al. (Particle Data Group), Prog. Theor. Exp. Phys. 2020, 083C01 (2020) and 2021 update.
+   \verb|https://pdg.lbl.gov/|.
 \end{thebibliography}
 
 \end{document}
