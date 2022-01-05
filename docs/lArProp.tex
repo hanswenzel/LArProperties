@@ -26,7 +26,9 @@ USA}
 %\tableofcontents
 \section{Introduction}
   In Geant4 and Opticks optical properties like e.g. the materials refractive
-  index are inputs that have to be provided when the detector is constructed. In this article we briefly
+  index are inputs that have to be provided when the detector is constructed.  High-precision modeling of 
+  light production, transport and detection in liquid Argon  experiments requires the use of the best available values to describe the properties of liquid Argon.
+In this article we briefly
   describe the physical processes relevant to the production, transport and detection of optical photons in liquid Argon.
   We collect the
   values and parameterizations of optical properties relevant for liquid Argon TPC's. We provide scripts that plot this quantities and that convert this values
@@ -48,7 +50,14 @@ produces light (scintillation)
   speed of light: $c = 299792458 m/sec$\\
   Planck constant: $h = 4.13566743\times10^{-15} eV/sec$\\
   \clearpage
-  \section{Light production}  
+  \section{Light production}
+  There are two relevant sources of light production when a charged particle passes through a medium. The two sources have very different characteristics and yield. One is Scintillation light produced when a
+  charged particle ionizes the material. The light is emitted isotropically from the point where it is produced. 
+  
+
+  
+ Cherenkov radiation is electromagnetic radiation emitted when a charged particle (such as an electron) passes through a dielectric medium at a speed greater than the phase velocity (speed of propagation of a wavefront in a medium) of light in that medium.
+  herenkov radiation as conical wave front
   \subsection{Scintillation Properties of liquid Argon}
 
   Efficient scintilator with typical Light yields in the order of a few 10,000’s of photons per $MeV$  deposited (depends on E field, particle type and purity)
@@ -59,7 +68,7 @@ dependent. For a proton:
 40,000 photons / MeV, E = 0 V / cm
   
   Liquid argon produces scintillation light via two distinct scintilation mechanisms, each
-  of which has a different characteristic time constant. The emmission spectra (Geant4 keywords: SCINTILLATIONCOMPONENT1,SCINTILLATIONCOMPONENT2) are passed to Geant4
+  of which has a different characteristic time constant. The emmssion spectra are passed to Geant4
   as a 2 column matrix where the first column is the photon energy and the second is the value.
 
   \begin{table}[h!]
@@ -69,14 +78,14 @@ dependent. For a proton:
       \hline
       \textbf{Property/Geant4 keyword} &       \textbf{value}\\
       \hline
-      yield/SCINTILLATIONYIELD & $50000 \gamma 's/MeV$ (no electric field)\\
+      light yield/SCINTILLATIONYIELD & $50000 \gamma 's/MeV$ (no electric field)\\
       Wavelength of emission/SCINTILLATIONCOMPONENT1 &  $128nm$ ($FWHM=10nm$)\\
       Wavelength of emission/SCINTILLATIONCOMPONENT2 &  $128nm$ ($FWHM=10nm$)\\
       fast component/SCINTILLATIONTIMECONSTANT1& $6 ns$\\  
       fast fraction/SCINTILLATIONYIELD1& $0.75$ \\
       slow component/SCINTILLATIONTIMECONSTANT2& $1500 ns$ \\
       slow fraction/SCINTILLATIONYIELD2& $0.25$\\
-      RESOLUTIONSCALE& $1$\\
+      ??????/RESOLUTIONSCALE& $1$\\
       \hline
     \end{tabular}
   \end{center}
@@ -249,7 +258,7 @@ For light, refraction follows Snell's law, which states that, for a given pair o
   photodetector.)
 
 \subsection{reflection} 
- Specular reflection, or regular reflection, is the mirror-like reflection of waves, such as light, from a surface.[1]
+ Specular reflection, or regular reflection, is the mirror-like reflection of waves, such as light, from a surface.
   The law of reflection states that a reflected ray of light emerges from the reflecting surface at the same angle to the surface normal as the incident ray, but on the opposing side of the surface normal in the plane formed by the incident and reflected rays.
   (boundary between liquid  Argon and metal walls of cryogenic vessel)
 
@@ -260,11 +269,28 @@ For light, refraction follows Snell's law, which states that, for a given pair o
   \section{Photon Detection}
 \subsection{Quantum efficiency and absorption length of the tetraphenyl butadiene (TPB) wave length shifter}
 \cite{ref:wls}
+\begin{table}[h!]
+  \begin{center}
+    \label{tab:wls}
+    \begin{tabular}{|c|c|c|} 
+      \hline
+      optical material property & Geant4 Keyword & value\\
+      \hline
+      Emission spectrum as function of photon energy & WLSCOMPONENT & see Figure \ref{fig:wls} (from  \cite{ref:wls}) \ \\
+      Absorption length as function of photon energy & WLSABSLENGTH & 400 nm at 128 nm \\
+      emmission time const                           &  WLSTIMECONSTANT        & 0.5 ns  \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Properties of the TPB wavelength shifter (values from \cite{ref:wls})}
+ \end{table}
+
+
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=35.5pc]{wls.pdf}
 \end{center}
-\caption{\label{fig:wls}wave length spectrum extracted form \cite{ref:wls}.}
+\caption{\label{fig:wls} TPB wave length spectrum extracted form \cite{ref:wls}.}
 \end{figure}
 
 \section{Conclusions and Outlook}
