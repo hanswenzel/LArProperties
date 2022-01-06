@@ -164,7 +164,12 @@ passed to Geant4 as a 2 column matrix where the first column is the photon energ
 \subsection{Refraction Index and group velocity}
 
 In \cite{ref:vg} the refraction index and group velocity  at $128 nm$ are measured at $n = 1.358 \pm 0.003$ and $\frac{1}{vg} = 7.46 \pm 0.08 ns/m$.
-                            ( compared to $n= 1.45 \pm 0.07$ \cite{ref:grace})
+( compared to $n= 1.45 \pm 0.07$ \cite{ref:grace})
+
+$\frac{1}{vg} = 7.46 \pm 0.08 ns/m$ corresponds to $0.134 m/nsec$ which is approximately $c_0/2240$ where $c_0$ is the speed of light in vacuum.
+(reading it from the gdml dump calculated by Geant4 one gets $c_0/2600$)
+
+
 
 The Sellmeier equation \ref{equ:sellmeier} below is an empirical relationship between refractive index and wavelength for a particular transparent medium.
 \begin{equation}
