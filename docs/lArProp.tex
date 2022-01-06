@@ -19,8 +19,9 @@ USA}
 \ead{wenzel@fnal.gov}
 
 \begin{abstract}
-  In Geant4 and Opticks optical properties like e.g. the materials refractive
-  index are inputs that have to be provided. In this paper we collect the
+  In Geant4 and Opticks optical properties like e.g. the refractive
+  index, absorption length, rayleiigh scattering length etc as well as surface properties are inputs that have to be provided.
+  In this paper we collect the
   optical properties relevant for liquid Argon TPC's.   
 \end{abstract}
 %\tableofcontents
@@ -52,12 +53,20 @@ produces light (scintillation)
   \clearpage
   \section{Light production}
   There are two relevant sources of light production when a charged particle passes through a medium. The two sources have very different characteristics and yield. One is Scintillation light produced when a
-  charged particle ionizes the material. The light is emitted isotropically from the point where it is produced. 
+  charged particle ionizes the material. The light is emitted isotropic from the point where it is produced. 
   
 
   
- Cherenkov radiation is electromagnetic radiation emitted when a charged particle (such as an electron) passes through a dielectric medium at a speed greater than the phase velocity (speed of propagation of a wavefront in a medium) of light in that medium.
-  herenkov radiation as conical wave front
+  Cerenkov radiation (\cite{ref:pdg},\cite{ref:wikipedia}) is electromagnetic radiation emitted when a charged particle passes through a dielectric medium at a speed greater than the phase velocity
+  (speed of propagation of a wavefront in a medium) of light in that medium.
+  Cerenkov radiation as conical wave front with the emission angle given by 
+   \begin{equation}
+  \cos \theta ={\frac {1}{n\beta }}
+   \end{equation}
+  with:\\
+   ratio between the speed of the particle $v_p$ and the speed of light as $\beta =\frac{v_p}{c}$.
+
+
   \subsection{Scintillation Properties of liquid Argon}
 
   Efficient scintilator with typical Light yields in the order of a few 10,000’s of photons per $MeV$  deposited (depends on E field, particle type and purity)
@@ -67,25 +76,25 @@ dependent. For a proton:
 24,000 photons / MeV, E = 500 V / cm
 40,000 photons / MeV, E = 0 V / cm
   
-  Liquid argon produces scintillation light via two distinct scintilation mechanisms, each
-  of which has a different characteristic time constant. The emmssion spectra are passed to Geant4
+  Liquid argon produces scintillation light via two distinct scintillation mechanisms, each
+  of which has a different characteristic time constant. The emission spectra are passed to Geant4
   as a 2 column matrix where the first column is the photon energy and the second is the value.
 
   \begin{table}[h!]
   \begin{center}
     \label{tab:table1}
-    \begin{tabular}{|l|c|} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+    \begin{tabular}{|l|l|c|} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
       \hline
-      \textbf{Property/Geant4 keyword} &       \textbf{value}\\
+      \textbf{Property}& \textbf{Geant4 keyword} &       \textbf{value}\\
       \hline
-      light yield/SCINTILLATIONYIELD & $50000 \gamma 's/MeV$ (no electric field)\\
-      Wavelength of emission/SCINTILLATIONCOMPONENT1 &  $128nm$ ($FWHM=10nm$)\\
-      Wavelength of emission/SCINTILLATIONCOMPONENT2 &  $128nm$ ($FWHM=10nm$)\\
-      fast component/SCINTILLATIONTIMECONSTANT1& $6 ns$\\  
-      fast fraction/SCINTILLATIONYIELD1& $0.75$ \\
-      slow component/SCINTILLATIONTIMECONSTANT2& $1500 ns$ \\
-      slow fraction/SCINTILLATIONYIELD2& $0.25$\\
-      ??????/RESOLUTIONSCALE& $1$\\
+      light yield&SCINTILLATIONYIELD & $50000 \gamma 's/MeV$ (no electric field)\\
+      Wavelength of emission&SCINTILLATIONCOMPONENT1 &  $128nm$ ($FWHM=10nm$) see \ref{fig:spectrum}\\
+      Wavelength of emission&SCINTILLATIONCOMPONENT2 &  $128nm$ ($FWHM=10nm$)  see \ref{fig:spectrum}\\
+      fast component&SCINTILLATIONTIMECONSTANT1& $6 ns$\\  
+      fast fraction&SCINTILLATIONYIELD1& $0.75$ \\
+      slow component&SCINTILLATIONTIMECONSTANT2& $1500 ns$ \\
+      slow fraction&SCINTILLATIONYIELD2& $0.25$\\
+                   &RESOLUTIONSCALE& $1$\\
       \hline
     \end{tabular}
   \end{center}
@@ -108,11 +117,11 @@ dependent. For a proton:
 %  \captionof{figure}{Another figure}
 %  \label{fig:spectrumE}
 \end{minipage}
-\caption{\label{fig:spectrum}Scintillation emmission spectrum.}
+\caption{\label{fig:spectrum}Scintillation emission spectrum.}
 \end{figure}
 
 \subsection{Cerenkov spectrum and Yield}
-A charged particle radiates if its speed is greater than the local phase speed of light $v_p$
+A charged particle radiates if its speed is greater than the local phase speed of light $v_p$. 
 In Geant4 the process is not contributing to energy loss.
 
 the charged particle travels in a medium with speed $v_p$  such that
@@ -141,7 +150,7 @@ passed to Geant4 as a 2 column matrix where the first column is the photon energ
     \label{tab:table1}
     \begin{tabular}{|c|c|} 
       \hline
-      optical material property & Geant4 Keyword\\
+      \textbf{optical material property} & \textbf{Geant4 Keyword}\\
       \hline
       Refraction index as function of photon energy &RINDEX      \\
       Absorption length as function of photon energy& ABSLENGTH   \\
@@ -168,7 +177,7 @@ n^2 = a_0 + \frac{a_{UV} \lambda^2}{\lambda^2 -\lambda^2_{UV}}+\frac{a_{IR}\lamb
     \label{tab:table1}
     \begin{tabular}{|c|c|c|} 
       \hline
-       Scintilation $\lambda$ & UV Resonance $\lambda$ &IR Resonance $\lambda$\\
+      \textbf{ Scintillation $\lambda$} &\textbf{UV Resonance $\lambda_{UV}$} &\textbf{IR Resonance $\lambda_{IR}$}\\
  (nm)           & (nm)          &(nm) \\
       \hline
 128 & 106.6 &908.3\\
@@ -183,14 +192,14 @@ n^2 = a_0 + \frac{a_{UV} \lambda^2}{\lambda^2 -\lambda^2_{UV}}+\frac{a_{IR}\lamb
     \label{tab:table1}
     \begin{tabular}{|c|c|c|c|} 
       \hline
- $T (K) $& $a_0$ & $a_{UV}$ & $a_{IR}$ \\
+\textbf{ $T (K) $}& \textbf{ $a_0$} & \textbf{ $a_{UV}$} & \textbf{ $a_{IR}$ }\\
 \hline
       $83.81$ & $1.24\pm0.09$ & $0.27\pm0.09$ & $0.00047\pm0.007$ \\
 $90$ & $1.26\pm 0.09$& $0.23\pm 0.09$ & $0.0023\pm0.007$ \\
       \hline
     \end{tabular}
   \end{center}
-  \caption{Sellmeier coefficents}
+  \caption{Sellmeier coefficients}
  \end{table}
  
 where the parameters $a_0$ , $a_{UV}$ and $a_{IR}$ known as Sellmeier coefficients have to be determined
@@ -226,15 +235,22 @@ Argon is highly transparent to its own scintillation light. (ABSLENGTH)
   \subsection{Rayleigh Scattering length}
   Rayleigh scattering length (RAYLEIGH). In the literature one can find the following calculated values at $128 nm$:  90 cm \cite{ref:vg}
   and $55\pm  5 cm$ \cite{ref:grace}. The  range of values for the Rayleigh
-scattering length is due to the refraction index at 128nm  n input  to the \ref{equ:rayleigh} below:
+scattering length $l$is due to the different refraction indices $n$ at $128nm$  input  to equation  \ref{equ:rayleigh} below:
 
   \begin{equation}
 l^{-1} = \frac{16\pi^3}{6\lambda^4} \left[ kT \rho^2 k_T \left( \frac{(n^2 - 1)(n^2 + 2)}{3} \right)^2\right]
   \label{equ:rayleigh}
 \end{equation}
 \noindent
-    with:\\
-
+    with\\
+    $l$: the scattering length\\
+    $\lambda$:  the wavelength of light\\
+    $n$: the index of refraction corresponding the wavelength of light\\
+    $T$: the temperature \\
+    $\rho$: the density \\
+    $k_T$: the isothermal compressibility\\
+    $k$: the Boltzman constant\\
+    
 
   
   \begin{figure}[ht]
@@ -245,7 +261,7 @@ l^{-1} = \frac{16\pi^3}{6\lambda^4} \left[ kT \rho^2 k_T \left( \frac{(n^2 - 1)(
   \end{figure}
   \section{Boundary processes}
   \subsection{Refraction and total internal reflection}
-In physics, refraction is the change in direction of a wave passing from one medium to another or from a gradual change in the medium.
+Refraction is the change in direction of a wave passing from one medium to another or from a gradual change in the medium.
 Total internal reflection is the optical phenomenon in which waves arriving at the interface (boundary) from one medium to another (e.g., from water to air) are not refracted into the second ("external") medium, but completely reflected back into the first ("internal") medium. It occurs when the second medium has a higher wave speed (lower refractive index) than the first, and the waves are incident at a sufficiently oblique angle on the interface.
 For light, refraction follows Snell's law, which states that, for a given pair of media, the ratio of the sines of the angle of incidence $\theta_1$ and angle of refraction $\theta_2$ is equal to the ratio of phase velocities (v1 / v2) in the two media, or equivalently, to the indices of refraction (n2 / n1) of the two media.
 
@@ -254,8 +270,8 @@ For light, refraction follows Snell's law, which states that, for a given pair o
   \label{equ:snell}
 \end{equation}
     n which waves arriving at the interface (boundary) from one medium to another
-  The Fresnel equations (or Fresnel coefficients) describe the reflection and transmission of light (or electromagnetic radiation in general) when incident on an interface between different optical media.(boundary between liqid Ar and wls, wls and
-  photodetector.)
+  The Fresnel equations (or Fresnel coefficients) describe the reflection and transmission of light (or electromagnetic radiation in general) when incident on an interface between different optical media.(boundary between liquid Ar and wls, wls and
+  photo-detector.)
 
 \subsection{reflection} 
  Specular reflection, or regular reflection, is the mirror-like reflection of waves, such as light, from a surface.
@@ -274,15 +290,15 @@ For light, refraction follows Snell's law, which states that, for a given pair o
     \label{tab:wls}
     \begin{tabular}{|c|c|c|} 
       \hline
-      optical material property & Geant4 Keyword & value\\
+      \textbf{optical material property} &\textbf{ Geant4 Keyword} & \textbf{value}\\
       \hline
       Emission spectrum as function of photon energy & WLSCOMPONENT & see Figure \ref{fig:wls} (from  \cite{ref:wls}) \ \\
-      Absorption length as function of photon energy & WLSABSLENGTH & 400 nm at 128 nm \\
-      emmission time const                           &  WLSTIMECONSTANT        & 0.5 ns  \\
+      Absorption length as function of photon energy & WLSABSLENGTH & $400 nm$ at $128 nm$ \\
+      emission time const                           &  WLSTIMECONSTANT        & $0.5 ns$  \\
       \hline
     \end{tabular}
   \end{center}
-  \caption{Properties of the TPB wavelength shifter (values from \cite{ref:wls})}
+  \caption{Properties of the TPB wavelength shifter (values from \cite{ref:wls}).}
  \end{table}
 
 
@@ -290,7 +306,7 @@ For light, refraction follows Snell's law, which states that, for a given pair o
 \begin{center}
 \includegraphics[width=35.5pc]{wls.pdf}
 \end{center}
-\caption{\label{fig:wls} TPB wave length spectrum extracted form \cite{ref:wls}.}
+\caption{\label{fig:wls} TPB wave length spectrum extracted from \cite{ref:wls}.}
 \end{figure}
 
 \section{Conclusions and Outlook}
@@ -326,7 +342,7 @@ Eur. Phys. J. C (2018) 78:329
   M. Babicz et al, 2020 JINST 15 P09009
 \bibitem{ref:ben}
   Ben Jones, \it{Introduction to Scintillation Light in Liquid Argon}
-  \verb''http://microboone-exp.fnal.gov''/
+  \verb|http://microboone-exp.fnal.gov|
   \bibitem{morikawa}E. Morikawa, R. Reininger, P. Gürtler, V. Saile, and P. Laporte,\\
 \it{Argon, krypton, and xenon excimer luminescence: From the dilute gas to the
 condensed phase.}\\
@@ -334,7 +350,9 @@ J. Chem. Phys. 91, 1469 (1989);
   \verb|https://doi.org/10.1063/1.457108|
 \bibitem{ref:pdg}
 P.A. Zyla et al. (Particle Data Group), Prog. Theor. Exp. Phys. 2020, 083C01 (2020) and 2021 update.
-   \verb|https://pdg.lbl.gov/|.
+\verb|https://pdg.lbl.gov/|.
+\bibitem{ref:wikipedia}
+\verb|https://en.wikipedia.org/wiki/Cherenkov_radiation|
 \end{thebibliography}
 
 \end{document}
