@@ -20,7 +20,7 @@ USA}
 
 \begin{abstract}
   In Geant4 and Opticks optical properties like e.g. the refractive
-  index, absorption length, rayleiigh scattering length etc as well as surface properties are inputs that have to be provided.
+  index, absorption length, rayleigh scattering length etc. as well as surface properties are inputs that have to be provided.
   In this paper we collect the
   optical properties relevant for liquid Argon TPC's.   
 \end{abstract}
@@ -43,7 +43,7 @@ produces light (scintillation)
 
 
 \begin{equation}
-  E_{\gamma}(eV) = \frac{h  c}{\lambda_{\gamma}  10^{-9}}
+  E_{\gamma}(eV) = \frac{h  c}{\lambda_{\gamma} \times  10^{-9}}
   \label{equ:equation1}
 \end{equation}
 \noindent
@@ -69,7 +69,7 @@ produces light (scintillation)
 
   \subsection{Scintillation Properties of liquid Argon}
 
-  Efficient scintilator with typical Light yields in the order of a few 10,000’s of photons per $MeV$  deposited (depends on E field, particle type and purity)
+  Efficient scintillator with typical Light yields in the order of a few 10,000’s of photons per $MeV$  deposited (depends on E field, particle type and purity)
   (SCINTILLATIONYIELD: $50000/MeV$ when no electric field present)
 Scintillation yield is E-field and particle
 dependent. For a proton:
@@ -101,8 +101,13 @@ dependent. For a proton:
   \caption{Scintillation Properties of liquid Argon.}
   \end{table}
 
-  Scintillation Quenching,  Birks
-  
+  Scintillation Quenching,
+  Birks law below:
+\begin{equation}
+  \frac {dL}{dx}=S\frac {\frac {dE}{dx}}{1+kB{\frac {dE}{dx}}}.
+  \label{equ:birks}
+\end{equation}
+  where L is the light yield, S is the scintillation efficiency, dE/dx is the specific energy loss of the particle per path length,  kB is the Birks coefficient. Its value depends on the scintillating material.
 \begin{figure}
 \centering
 \begin{minipage}{.5\textwidth}
@@ -128,10 +133,12 @@ the charged particle travels in a medium with speed $v_p$  such that
 $\frac{c}{n} < v_p < c$.
 from \cite{ref:pdg}
 \begin{equation}
-\cos(\theta_C)= \frac{1}{n \beta}
+  \cos(\theta_C)= \frac{1}{n \beta}
+  \label{equ:ceren1}
 \end{equation}
 \begin{equation}
   \frac{d^2N}{dEdx} = \frac{2 \pi \alpha  z^2}  {\lambda^2} \left(1 - \frac{1}{(\beta^2 n^2(\lambda))}\right)
+  \label{equ:ceren2}
 \end{equation}
 \begin{figure}[ht]
 \begin{center}
@@ -255,14 +262,15 @@ l^{-1} = \frac{16\pi^3}{6\lambda^4} \left[ kT \rho^2 k_T \left( \frac{(n^2 - 1)(
     $\rho$: the density \\
     $k_T$: the isothermal compressibility\\
     $k$: the Boltzman constant\\
-    
+
+Figure \ref{fig:rayleigh} shows the rayleigh scattering length as a function of $\lambda$ calculated using formula \ref{equ:rayleigh}.
 
   
   \begin{figure}[ht]
     \begin{center}
       \includegraphics[width=35.5pc]{rayleigh.pdf}
     \end{center}
-    \caption{\label{fig:rayleigh}rayleigh scattering length.}
+    \caption{\label{fig:rayleigh}rayleigh scattering length as a function of $\lambda$.}
   \end{figure}
   \section{Boundary processes}
   \subsection{Refraction and total internal reflection}
@@ -357,7 +365,9 @@ J. Chem. Phys. 91, 1469 (1989);
 P.A. Zyla et al. (Particle Data Group), Prog. Theor. Exp. Phys. 2020, 083C01 (2020) and 2021 update.
 \verb|https://pdg.lbl.gov/|.
 \bibitem{ref:wikipedia}
-\verb|https://en.wikipedia.org/wiki/Cherenkov_radiation|
+  \verb|https://en.wikipedia.org/wiki/Cherenkov_radiation|
+\bibitem{ref:nest}
+  \verb|https://nest.physics.ucdavis.edu/|.
 \end{thebibliography}
 
 \end{document}
