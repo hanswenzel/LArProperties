@@ -8,6 +8,7 @@
 \usepackage{graphicx}
 \usepackage{epstopdf} 
 \begin{document}
+\today
 
 \title{Liquid Argon optical properties to be used in Geant4 and Opticks Simulations}
 
@@ -24,6 +25,7 @@ USA}
   In this paper we collect the
   optical properties relevant for liquid Argon TPC's.   
 \end{abstract}
+
 %\tableofcontents
 \section{Introduction}
   In Geant4 and Opticks optical properties like e.g. the materials refractive
@@ -40,6 +42,7 @@ In this article we briefly
 charge from the surrounding argon (ionization) and
 produces light (scintillation)
 
+ The Geant4 keywords used in this article refer to Geant4 version $ > 11.0$ released in December 2021. The latest version introduced changes to the Geant4 API with regards to optical material properties. 
 
 
 \begin{equation}
@@ -79,13 +82,13 @@ dependent. For a proton:
   Liquid argon produces scintillation light via two distinct scintillation mechanisms, each
   of which has a different characteristic time constant. The emission spectra are passed to Geant4
   as a 2 column matrix where the first column is the photon energy and the second is the value.
-
+ 
   \begin{table}[h!]
   \begin{center}
     \label{tab:table1}
     \begin{tabular}{|l|l|c|} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
       \hline
-      \textbf{Property}& \textbf{Geant4 keyword}\footnote{The Geant4 keywords used in this article refer to Geant4 version $ > 11.0$ released in December 2021. The latest version introduced changes to the Geant4 API with regards to optical material properties.}  &       \textbf{value}\\
+      \textbf{Property}& \textbf{Geant4 keyword} &       \textbf{value}\\
       \hline
       light yield&SCINTILLATIONYIELD & $50000 \gamma 's/MeV$ (no electric field)\\
       Wavelength of emission&SCINTILLATIONCOMPONENT1 &  $128nm$ ($FWHM=10nm$) see \ref{fig:spectrum}\\
@@ -107,7 +110,8 @@ dependent. For a proton:
   \frac {dL}{dx}=S\frac {\frac {dE}{dx}}{1+kB{\frac {dE}{dx}}}.
   \label{equ:birks}
 \end{equation}
-  where L is the light yield, S is the scintillation efficiency, dE/dx is the specific energy loss of the particle per path length,  kB is the Birks coefficient. Its value depends on the scintillating material.
+where $L$ is the light yield, $S$ is the scintillation efficiency, $dE/dx$ is the specific energy loss of the particle per path length, $kB$ is the Birks coefficient.
+Its value depends on the scintillating material and particle type.
 \begin{figure}
 \centering
 \begin{minipage}{.5\textwidth}
@@ -241,6 +245,7 @@ experimentally.
 \end{center}
 \caption{\label{fig:vg}group velocity}
 \end{figure}
+
 \subsection{Absorption length}
 Argon is highly transparent to its own scintillation light. (ABSLENGTH)
   $> 1.1 m$  (ArXiv:1511.07725) 
