@@ -59,7 +59,7 @@ void wls() {
     */
 }
 //----------------------------------------------------------------------
-// function prints out the const rayleigh length in the geant 4 gdml format
+// function prints out the WLS emmission spectrum  in the geant 4 gdml format
 // emin and emax in nm
 // nsteps number of steps
 // index of Temperature Array

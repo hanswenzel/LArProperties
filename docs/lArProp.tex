@@ -4,20 +4,26 @@
 % data according to the instructions in PoSauthmanual.pdf
 %\documentclass[article]
 %{jpconf}
-\documentclass[a4paper]{jpconf}
-\usepackage{graphicx}
-\usepackage{epstopdf} 
-\begin{document}
-\today
+%\documentclass[a4paper]{jpconf}
+\documentclass{article}
+%\usepackage[pass,paperwidth=10.in,paperheight=12in]{geometry}
+\usepackage[pass,letterpaper]{geometry}
 
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{authblk}
+\usepackage{hyperref}
+
+%\begin{document}
 \title{Liquid Argon optical properties to be used in Geant4 and Opticks Simulations}
 
-\author{ Hans~Wenzel$^1$}
+\date{\today}
+\author{ Hans~Wenzel}
 
-\address{ $^1$~Fermilab PO Box 500, Batavia, IL 60510,
-USA}
+\affil[$^1$ ~Fermilab PO Box 500, Batavia, IL 60510,USA]
 
-\ead{wenzel@fnal.gov}
+\begin{document}
+\maketitle
 
 \begin{abstract}
   In Geant4 and Opticks optical properties like e.g. the refractive
@@ -25,8 +31,9 @@ USA}
   In this paper we collect the
   optical properties relevant for liquid Argon TPC's.   
 \end{abstract}
-
-%\tableofcontents
+\clearpage 
+\tableofcontents
+\clearpage
 \section{Introduction}
   In Geant4 and Opticks optical properties like e.g. the materials refractive
   index are inputs that have to be provided when the detector is constructed.  High-precision modeling of 
@@ -158,7 +165,7 @@ passed to Geant4 as a 2 column matrix where the first column is the photon energ
  
 \begin{table}[h!]
   \begin{center}
-    \label{tab:table1}
+    \label{tab:table2}
     \begin{tabular}{|c|c|} 
       \hline
       \textbf{optical material property} & \textbf{Geant4 Keyword}\\
@@ -190,7 +197,7 @@ n^2 = a_0 + \frac{a_{UV} \lambda^2}{\lambda^2 -\lambda^2_{UV}}+\frac{a_{IR}\lamb
 
  \begin{table}[h!]
   \begin{center}
-    \label{tab:table1}
+    \label{tab:table3}
     \begin{tabular}{|c|c|c|} 
       \hline
       \textbf{ Scintillation $\lambda$} &\textbf{UV Resonance $\lambda_{UV}$} &\textbf{IR Resonance $\lambda_{IR}$}\\
@@ -205,7 +212,7 @@ n^2 = a_0 + \frac{a_{UV} \lambda^2}{\lambda^2 -\lambda^2_{UV}}+\frac{a_{IR}\lamb
  
  \begin{table}[h!]
   \begin{center}
-    \label{tab:table1}
+    \label{tab:table4}
     \begin{tabular}{|c|c|c|c|} 
       \hline
 \textbf{ $T (K) $}& \textbf{ $a_0$} & \textbf{ $a_{UV}$} & \textbf{ $a_{IR}$ }\\
@@ -237,7 +244,7 @@ experimentally.
 \begin{center}
 \includegraphics[width=35.5pc]{sellmeier.pdf}
 \end{center}
-\caption{\label{fig:sellmeier}refraction index}
+\caption{\label{fig:sellmeier}Refraction index. The experimental data is from \cite{ref:Sinnock}.}
 \end{figure}
 \begin{figure}[ht]
 \begin{center}
@@ -278,7 +285,7 @@ Figure \ref{fig:rayleigh} shows the rayleigh scattering length as a function of 
     \caption{\label{fig:rayleigh}rayleigh scattering length as a function of $\lambda$.}
   \end{figure}
   \section{Boundary processes}
-  \subsection{Refraction and total internal reflection}
+  \subsection{Refraction and total internal Reflection}
 Refraction is the change in direction of a wave passing from one medium to another or from a gradual change in the medium.
 Total internal reflection is the optical phenomenon in which waves arriving at the interface (boundary) from one medium to another (e.g., from water to air) are not refracted into the second ("external") medium, but completely reflected back into the first ("internal") medium. It occurs when the second medium has a higher wave speed (lower refractive index) than the first, and the waves are incident at a sufficiently oblique angle on the interface.
 For light, refraction follows Snell's law, which states that, for a given pair of media, the ratio of the sines of the angle of incidence $\theta_1$ and angle of refraction $\theta_2$ is equal to the ratio of phase velocities (v1 / v2) in the two media, or equivalently, to the indices of refraction (n2 / n1) of the two media.
@@ -291,7 +298,7 @@ For light, refraction follows Snell's law, which states that, for a given pair o
   The Fresnel equations (or Fresnel coefficients) describe the reflection and transmission of light (or electromagnetic radiation in general) when incident on an interface between different optical media.(boundary between liquid Ar and wls, wls and
   photo-detector.)
 
-\subsection{reflection} 
+\subsection{Reflection} 
  Specular reflection, or regular reflection, is the mirror-like reflection of waves, such as light, from a surface.
   The law of reflection states that a reflected ray of light emerges from the reflecting surface at the same angle to the surface normal as the incident ray, but on the opposing side of the surface normal in the plane formed by the incident and reflected rays.
   (boundary between liquid  Argon and metal walls of cryogenic vessel)
@@ -302,7 +309,7 @@ For light, refraction follows Snell's law, which states that, for a given pair o
   \clearpage
   \section{Photon Detection}
 \subsection{Quantum efficiency and absorption length of the tetraphenyl butadiene (TPB) wave length shifter}
-\cite{ref:wls}
+
 \begin{table}[h!]
   \begin{center}
     \label{tab:wls}
@@ -338,7 +345,10 @@ For light, refraction follows Snell's law, which states that, for a given pair o
    \verb|https://github.com/hanswenzel/CaTS|.
 \bibitem{ref:Geant4-4}
  Allison J et al. 2016, {\it Nuclear Instruments and Methods in Physics
-                Research A} {\bf 835} (186--225).
+   Research A} {\bf 835} (186--225).
+\bibitem{ref:Sinnock}
+ A. C. Sinnock, B. L. Smith, {\it Refractive indices of the condensed inert gases}, Phys. Rev. 181 (1969) (1297-1307).
+ 
 \bibitem{ref:Geant4}
  \verb|http://geant.cern.ch/|.
 \bibitem{ref:inspire} High-Energy Physics Literature Database,
