@@ -35,8 +35,8 @@
 \tableofcontents
 \clearpage
 \section{Introduction}
-  In Geant4 and Opticks optical properties like e.g. the materials refractive
-  index are inputs that have to be provided when the detector is constructed.  High-precision modeling of 
+  In Geant4 \cite{ref:geant4} and Opticks \cite{ref:opticks} optical properties like e.g. the materials refractive
+  index or rayleigh scattering length are inputs that have to be provided when the detector is constructed.  High-precision modeling of 
   light production, transport and detection in liquid Argon  experiments requires the use of the best available values to describe the properties of liquid Argon.
 In this article we briefly
   describe the physical processes relevant to the production, transport and detection of optical photons in liquid Argon.
@@ -45,6 +45,8 @@ In this article we briefly
   into a gdml description that can be directly used in the Geant4 Detector description.
   All values are summarized in the file material.xml which can be found in the github repository \cite{ref:scripts}.
   Usually quantities are given as a function of photon wavelength but Geant4 requires the photon energy.
+
+  A nice overview about the properties of Scintillation Light in Liquid Argon can befound in \cite{ref:ben}.
   The motion of the charged particles liberates
 charge from the surrounding argon (ionization) and
 produces light (scintillation)
@@ -339,13 +341,21 @@ For light, refraction follows Snell's law, which states that, for a given pair o
  \section*{References}
 
  \begin{thebibliography}{99}
+    \bibitem{ref:geant4}
+   Instruments and Methods in Physics Research A 506 (2003) 250-303,  IEEE Transactions on Nuclear Science 53 No. 1 (2006) 270-278 and Nuclear Instruments and Methods in Physics Research A 835 (2016) 186-225
+
  \bibitem{ref:LArProperties}
    \verb|https://github.com/hanswenzel/LArProperties|.
  \bibitem{ref:CaTS}
    \verb|https://github.com/hanswenzel/CaTS|.
-\bibitem{ref:Geant4-4}
- Allison J et al. 2016, {\it Nuclear Instruments and Methods in Physics
-   Research A} {\bf 835} (186--225).
+%\bibitem{ref:Geant4-4}
+% Allison J et al. 2016, {\it Nuclear Instruments and Methods in Physics
+%   Research A} {\bf 835} (186--225).
+
+\bibitem{ref:opticks}
+ Simon Blyth, {\it Opticks : GPU Optical Photon Simulation for Particle Physics using NVIDIA® OptiX$^{TM}$},
+EPJ Web of Conferences 214, 02027 (2019).\\
+  \verb| https://bitbucket.org/simoncblyth/opticks|.
 \bibitem{ref:Sinnock}
  A. C. Sinnock, B. L. Smith, {\it Refractive indices of the condensed inert gases}, Phys. Rev. 181 (1969) (1297-1307).
  
@@ -370,7 +380,7 @@ Eur. Phys. J. C (2018) 78:329
   M. Babicz et al, 2020 JINST 15 P09009
 \bibitem{ref:ben}
   Ben Jones, \it{Introduction to Scintillation Light in Liquid Argon}
-  \verb|http://microboone-exp.fnal.gov|
+  \verb|https://microboone-exp.fnal.gov/public/talks/LArTPCWorkshopScintLight_bjpjone_2014.pdf|
   \bibitem{morikawa}E. Morikawa, R. Reininger, P. Gürtler, V. Saile, and P. Laporte,\\
 \it{Argon, krypton, and xenon excimer luminescence: From the dilute gas to the
 condensed phase.}\\
