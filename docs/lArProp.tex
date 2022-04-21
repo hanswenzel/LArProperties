@@ -13,9 +13,9 @@
 \usepackage{epstopdf}
 \usepackage{authblk}
 \usepackage{hyperref}
-
+\usepackage{amsmath}
 %\begin{document}
-\title{Liquid Argon optical properties to be used in Geant4 and Opticks Simulations}
+\title{Liquid Argon optical properties for Geant4 and Opticks Simulations}
 
 \date{\today}
 \author{ Hans~Wenzel}
@@ -27,32 +27,106 @@
 
 \begin{abstract}
   In Geant4 and Opticks optical properties like e.g. the refractive
-  index, absorption length, rayleigh scattering length etc. as well as surface properties are inputs that have to be provided.
+  index, absorption length, Rayleigh scattering length etc. as well as surface properties are inputs that have to be provided.
   In this paper we collect the
-  optical properties relevant for liquid Argon TPC's.   
+  optical properties relevant for  simulating the optical response of liquid Argon TPC's.   
 \end{abstract}
 \clearpage 
 \tableofcontents
 \clearpage
 \section{Introduction}
+
+In Geant4, the optical physics has an exceptional position among the physics processes, as it
+adds special particles (optical photons) and new properties for materials and optical surfaces.
+Being the only particle that can be reflected or refracted at optical surfaces, as well as being
+only created in optical processes like scintillation, Cerenkov radiation, and wavelength-shifting
+(WLS) makes the G4OpticalPhoton differing from the “usual” high-energy particle-physics
+photon (G4Gamma) in Geant4. Optical properties need to be assigned to the materials whenever
+optical physics processes are to be considered in the simulation. Every material needs at least
+a refractive index spectrum (which corresponds to the dispersion relation) and an attenuation
+length spectrum, though the attenuation length is by default set to infinity if it is not defined.
+Special optical materials, i.e. scintillating and WLS materials, additionally require the specification
+of the emission spectra as well as of the rise and decay times. More properties can be
+assigned to optical surfaces between volumes, e.g. the reflectivity of the surface.
+An article describing the peculiarities (and pitfalls) of Geant4 optical simulation can be found here \cite{ref:peculiar}
+  
   In Geant4 \cite{ref:geant4} and Opticks \cite{ref:opticks} optical properties like e.g. the materials refractive
-  index or rayleigh scattering length are inputs that have to be provided when the detector is constructed.  High-precision modeling of 
+  index, Rayleigh scattering length or absorption length are inputs that have to be provided when the detector is constructed.  The properties are either bulk properties (e. g.  the refractive
+  index) or boundary properties (G4OpticalSurfaces e.g. reflectivity). Geant4 only traces optical photons for materials for which at least the refractive index is defined other wise the optical photons are killed.
+  High-precision modeling of 
   light production, transport and detection in liquid Argon  experiments requires the use of the best available values to describe the properties of liquid Argon.
-In this article we briefly
+ 
+  In this article we briefly
   describe the physical processes relevant to the production, transport and detection of optical photons in liquid Argon.
   We collect the
   values and parameterizations of optical properties relevant for liquid Argon TPC's. We provide scripts that plot this quantities and that convert this values
   into a gdml description that can be directly used in the Geant4 Detector description.
   All values are summarized in the file material.xml which can be found in the github repository \cite{ref:scripts}.
   Usually quantities are given as a function of photon wavelength but Geant4 requires the photon energy.
-
-  A nice overview about the properties of Scintillation Light in Liquid Argon can befound in \cite{ref:ben}.
+  
+  A nice overview about the properties of Scintillation Light in Liquid Argon can be found in \cite{ref:ben}.
   The motion of the charged particles liberates
 charge from the surrounding argon (ionization) and
 produces light (scintillation)
 
- The Geant4 keywords used in this article refer to Geant4 version $ > 11.0$ released in December 2021. The latest version introduced changes to the Geant4 API with regards to optical material properties. 
 
+
+ 
+
+
+
+The specific properties will be covered in detail in the next sections. Here we want to give an overview of the basic properties.
+  \begin{itemize}
+\item 
+Liquid Argon has a high scintillation yield in order of 20,000–40,000 photons/MeV depending on purity. The Scintillation yield is E-field and particle dependent.
+For a proton the yield is listed in Table~\ref{tab:tablezero}.
+  \begin{table}[h!]
+  \begin{center}
+    \label{tab:tablezero}
+    \begin{tabular}{|c|c|} 
+      \hline
+      \textbf{electric Field}& \textbf{Scintillation yield}\\
+              $[V/cm]$ & $[photons/MeV]$ \\
+      \hline
+      0&40000\\
+      500&24000\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Scintillation yield in liquid Argon for a proton for various electric fields.}
+  \end{table}
+  
+\item Tracking detectors can be constructed by applying an electric field across the bulk
+  and collecting electrons freed by ionization. Ionization and Scintillation are competing
+  processes and the number of electrons and scintillation photons is correlated (see e.g \cite{ref:nest}). 
+
+\item The wavelength of the scintillation photons are in the vacuum ultraviolet. The emmission spectrum is modeled as a Gaussian:\\
+  $G(\lambda)= ae ^ {- \frac {(\lambda-b)^2} {2\sigma^2}}$ \\
+  where: \\
+$a$	= 	height of the curve's peak\\
+$b$	= 	the position of the center of the peak (128 $nm$)\\
+$\sigma$= 	the standard deviation (10 $nm$)\\
+$e$	= 	Euler's number\\
+
+With both a fast (6nsec 3$\Sigma_u$ excimer) and slow component (1590 nsec via 1$\Sigma_u$ excimer state) 
+Liquid argon produces scintillation light via two distinct scintilation mechanisms, each
+of which has a different characteristic time constant
+The fast scintillation path
+
+\item Relatively complicated including various excimer states can be induced by ionization but not by scintillation photons. For that reason reemmission of scintillation light doesn't play a role in liquid Argon.
+  
+\item Liquid Argon is highly transparent to its own scintillation light with absorption length in the order of several meters depending on purity.
+
+\item Rayleigh scattering length is 90 (55) cm at the scintillation wavelength of pure liquid argon (128 nm). This significantly diffuses the scintillation light for large detectors required for neutrino physics. 
+\item To match the photon wavelength to the quantum efficiency (QE) of photo detectors wavelength shifters are used. A typical wavelength shifting material used to coat the photo detectors in liquid
+Argon TPCs is TPB with a reemission spectrum peaking at 420 nm. 
+\end{itemize}
+
+The Geant4 keywords used in this article refer to Geant4 version $ > 11.0$ released in December 2021.
+\footnote{Note: the latest version introduced changes to the Geant4 API with regards to optical material properties.} 
+
+Note while in the literature properties like e.g. the refraction index are give as a function of the wavelength $\lambda$ while Geant4 requires this properties to be expressed as a function of photon energy.
+ The Conversion between wavelength (in nm) and photon energy (eV) is given in Equation \ref{equ:equation1}
 
 \begin{equation}
   E_{\gamma}(eV) = \frac{h  c}{\lambda_{\gamma} \times  10^{-9}}
@@ -63,35 +137,47 @@ produces light (scintillation)
   speed of light: $c = 299792458 m/sec$\\
   Planck constant: $h = 4.13566743\times10^{-15} eV/sec$\\
   \clearpage
+
   \section{Light production}
-  There are two relevant sources of light production when a charged particle passes through a medium. The two sources have very different characteristics and yield. One is Scintillation light produced when a
-  charged particle ionizes the material. The light is emitted isotropic from the point where it is produced. 
-  
-
-  
+  There are two relevant primary sources of light production when a charged particle passes through a medium.
+One is Scintillation light the other is Cerenkov radiation.
+The two sources have very different characteristics and yield.
+Scintillation light produced when a  charged particle ionizes the material. The light is emitted isotropic from the point where it is produced. 
   Cerenkov radiation (\cite{ref:pdg},\cite{ref:wikipedia}) is electromagnetic radiation emitted when a charged particle passes through a dielectric medium at a speed greater than the phase velocity
-  (speed of propagation of a wavefront in a medium) of light in that medium.
-  Cerenkov radiation as conical wave front with the emission angle given by 
-   \begin{equation}
-  \cos \theta ={\frac {1}{n\beta }}
-   \end{equation}
-  with:\\
-   ratio between the speed of the particle $v_p$ and the speed of light as $\beta =\frac{v_p}{c}$.
+  (speed of propagation of a wavefront in a medium) of light in that medium. Cere Cerenkov radiation directional  emitted as a conical wave front around the direction of the charge particle with
+  the emission angle given by \ref{equ:ceren1}.
+  Note Geant4 provides the transition radiation process as another primary source of photons but this doesn't play a role in liquid Argon TPCs.
+  The wave length shifting (WLS) process where a WLS material absorbs optical photons and then re-emits them with a longer wavelength is a source of secondary photons. 
+  
+  
+ 
 
+  
 
   \subsection{Scintillation Properties of liquid Argon}
 
   Efficient scintillator with typical Light yields in the order of a few 10,000’s of photons per $MeV$  deposited (depends on E field, particle type and purity)
   (SCINTILLATIONYIELD: $50000/MeV$ when no electric field present)
-Scintillation yield is E-field and particle
-dependent. For a proton:
-24,000 photons / MeV, E = 500 V / cm
-40,000 photons / MeV, E = 0 V / cm
+
   
   Liquid argon produces scintillation light via two distinct scintillation mechanisms, each
-  of which has a different characteristic time constant. The emission spectra are passed to Geant4
+  of which has a different characteristic time constant.
+  The emission spectra are passed to Geant4
   as a 2 column matrix where the first column is the photon energy and the second is the value.
- 
+  result into excited, $Ar^{\ast}_2$ 2 , or ionized, $Ar^+_2$, argon dimers.
+$Ar^+_2$ recombines with a thermalized electron
+to form $Ar^{\ast}_2$ 
+which in turn decays non-radiatively to the first
+singlet and triplet excited states  $1\Sigma^+_u$ and  $3\Sigma^+_u$ . These
+two states, whose dis-excitation leads to the emission of
+the scintillation photons, have approximately the same
+energy with respect to the dissociative ground state,
+while the lifetimes are very different: in the nanosecond
+range for $1\Sigma^+_u$  and in the microsecond range for $3\Sigma^+_u$.
+
+\cite{ref:ettore}
+
+
   \begin{table}[h!]
   \begin{center}
     \label{tab:table1}
@@ -144,6 +230,16 @@ In Geant4 the process is not contributing to energy loss.
 
 the charged particle travels in a medium with speed $v_p$  such that
 $\frac{c}{n} < v_p < c$.
+ Cerenkov radiation as conical wave front with the emission angle given by 
+   \begin{equation}
+  \cos \theta ={\frac {1}{n\beta }}
+   \end{equation}
+  with:\\
+   ratio between the speed of the particle $v_p$ and the speed of light as $\beta =\frac{v_p}{c}$.
+
+
+
+
 from \cite{ref:pdg}
 \begin{equation}
   \cos(\theta_C)= \frac{1}{n \beta}
@@ -159,6 +255,8 @@ from \cite{ref:pdg}
 \end{center}
 \caption{\label{fig:cerenkov}Cerenkov spectrum}
 \end{figure}
+$\alpha $ is the fine-structure constant.\\
+$\beta = \frac{v_{p}}{c}$
 
 \clearpage
 \section{Light propagation}
@@ -182,6 +280,18 @@ passed to Geant4 as a 2 column matrix where the first column is the photon energ
  \end{table}
 
 \subsection{Refraction Index and group velocity}
+ Every material needs at least
+a refractive index spectrum  and an absorption 
+length spectrum.  The absorption length is by default set to infinity if it is not defined. If the group velocity $v_g$ is not provided explicitely it is calculated from the refraction index.
+The speed of optical photons in Geant4 is given by the group velocity $v_g$. The relation between group velocity and the refraction index is given by:
+
+\begin{equation}
+  v_g (\lambda)= \frac{c}{n-\lambda \frac{\partial{n}}{\partial{\lambda}}}
+      \label{equ:vgroup}
+% \caption{relation between refraction index and group velocity.}       
+\end{equation}
+
+Figure \label{fig:vg} shows the calculated group velocity compared to the phase velocity $1/n$.
 
 In \cite{ref:vg} the refraction index and group velocity  at $128 nm$ are measured at $n = 1.358 \pm 0.003$ and $\frac{1}{vg} = 7.46 \pm 0.08 ns/m$.
 ( compared to $n= 1.45 \pm 0.07$ \cite{ref:grace})
@@ -230,29 +340,22 @@ $90$ & $1.26\pm 0.09$& $0.23\pm 0.09$ & $0.0023\pm0.007$ \\
 where the parameters $a_0$ , $a_{UV}$ and $a_{IR}$ known as Sellmeier coefficients have to be determined
 experimentally.
  
- The relation between group velocity and the refraction index is given by:
-
-\begin{equation}
-  v_g (\lambda)= \frac{c}{n-\lambda \frac{\partial{n}}{\partial{\lambda}}}
-      \label{equ:vgroup}
-% \caption{relation between refraction index and group velocity.}       
-\end{equation}
 
  
 
 
-% \caption{relation between refraction index and group velocity.} 
+
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=35.5pc]{sellmeier.pdf}
 \end{center}
-\caption{\label{fig:sellmeier}Refraction index. The experimental data is from \cite{ref:Sinnock}.}
+\caption{\label{fig:sellmeier}Refraction index as a function of $\lambda$ for various temperatures. The experimental data is from \cite{ref:Sinnock} and \cite{ref:vg}.}
 \end{figure}
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=35.5pc]{vg.pdf}
+\includegraphics[width=35.5pc]{velocity.pdf}
 \end{center}
-\caption{\label{fig:vg}group velocity}
+\caption{\label{fig:vg}Group velocity $v_g$ and phase velocity $v_p$ compared to speed of light in a vacuum $c$ as function of photon energy.}
 \end{figure}
 
 \subsection{Absorption length}
@@ -277,15 +380,17 @@ l^{-1} = \frac{16\pi^3}{6\lambda^4} \left[ kT \rho^2 k_T \left( \frac{(n^2 - 1)(
     $k_T$: the isothermal compressibility\\
     $k$: the Boltzman constant\\
 
-Figure \ref{fig:rayleigh} shows the rayleigh scattering length as a function of $\lambda$ calculated using formula \ref{equ:rayleigh}.
+Figure \ref{fig:rayleigh} shows the Rayleigh scattering length as a function of $\lambda$ calculated using formula \ref{equ:rayleigh}.
 
   
   \begin{figure}[ht]
     \begin{center}
       \includegraphics[width=35.5pc]{rayleigh.pdf}
     \end{center}
-    \caption{\label{fig:rayleigh}rayleigh scattering length as a function of $\lambda$.}
+    \caption{\label{fig:rayleigh}Rayleigh scattering length as a function of $\lambda$.}
   \end{figure}
+  \clearpage
+  
   \section{Boundary processes}
   \subsection{Refraction and total internal Reflection}
 Refraction is the change in direction of a wave passing from one medium to another or from a gradual change in the medium.
@@ -305,13 +410,38 @@ For light, refraction follows Snell's law, which states that, for a given pair o
   The law of reflection states that a reflected ray of light emerges from the reflecting surface at the same angle to the surface normal as the incident ray, but on the opposing side of the surface normal in the plane formed by the incident and reflected rays.
   (boundary between liquid  Argon and metal walls of cryogenic vessel)
 
-
+Total Reflectivity
+Fraction specular / diffuse
 
   
   \clearpage
   \section{Photon Detection}
 \subsection{Quantum efficiency and absorption length of the tetraphenyl butadiene (TPB) wave length shifter}
+WLS materials absorb optical photons and then re-emit them with a longer wavelength. This
+effect is referred to as photoluminescence.
+The main properties characterising a WLS material are the absorption and emission spec-
+trum, the rise and decay time, and the multiplication factor.
 
+In addition
+to the ABSLENGTH variable, which defines the usual absorption of optical photons, the
+WLSABSLENGTH variable corresponds to absorption which triggers the WLS process.
+
+The extracted VUV absorption lengths at 128 nm was measured to be $\approx$  400 nm \cite{ref:wls}
+
+
+The decay time spectrum of the WLS process (also essential for the accurate simulation of
+the signal shape/timing) is by default a $\delta$-function rather than an exponential spectrum.
+If an exponential spectrum is to be used, this has to be activated when registering the
+optical physics process in the Physics List. 
+thicknesses between 0.5 $\mu m$ and 3.7 $\mu m$
+
+
+propagate to the TPB surface boundary where they pass
+into bulk TPB or are reflected, according to Snell’s law.
+The TPB/vacuum interface is modeled as a rough
+surface using the GLISUR surface model  in GEANT4
+with a polish value of 0.01 $\pm$ 0.09 0.01 .
+No dependence of the reemission spectrum of TPB on incident wavelength was observed
 \begin{table}[h!]
   \begin{center}
     \label{tab:wls}
@@ -319,9 +449,12 @@ For light, refraction follows Snell's law, which states that, for a given pair o
       \hline
       \textbf{optical material property} &\textbf{ Geant4 Keyword} & \textbf{value}\\
       \hline
-      Emission spectrum as function of photon energy & WLSCOMPONENT & see Figure \ref{fig:wls} (from  \cite{ref:wls}) \ \\
-      Absorption length as function of photon energy & WLSABSLENGTH & $400 nm$ at $128 nm$ \\
-      emission time const                           &  WLSTIMECONSTANT        & $0.5 ns$  \\
+      Emission spectrum  & WLSCOMPONENT & see Figure \ref{fig:wls} (from  \cite{ref:wls})  \\
+      Absorption length  & WLSABSLENGTH & $400 nm$ at $128 nm$ \\
+      emission time constant                           &  WLSTIMECONSTANT        & $0.5 ns$  \\
+      Emission spectrum  & WLSCOMPONENT2 & NA  \\
+      Absorption length  & WLSABSLENGTH2 & NA \\
+      emission time constant                           &  WLSTIMECONSTANT2        & NA  \\
       \hline
     \end{tabular}
   \end{center}
@@ -333,34 +466,123 @@ For light, refraction follows Snell's law, which states that, for a given pair o
 \begin{center}
 \includegraphics[width=35.5pc]{wls.pdf}
 \end{center}
-\caption{\label{fig:wls} TPB wave length spectrum extracted from \cite{ref:wls}.}
+\caption{\label{fig:wls} TPB wave length spectrum extracted from~\cite{ref:wls}(red) with fit superimposed (blue).}
 \end{figure}
 
+\begin{table}[h!]
+  \begin{center}
+    \label{tab:wlsfit}
+    \begin{tabular}{|l|l|l|} 
+      \hline
+      \textbf{Parameter} &\textbf{ Value } & \textbf{Uncertainty $(\pm)$}\\
+      \hline
+ A                        &     0.696747   &   0.0212897 \\  
+$\alpha$                     &    0.0393111   &   0.000930845 \\
+$\sigma_1$                      &      15.1679 $nm$  &   0.55542 $nm$    \\
+$\mu_1$                       &      421.863   $nm$&   1.11517 $nm$    \\
+$\sigma_2$                      &      11.2098 $nm$  &   0.203709 $nm$    \\
+$\mu_2$                       &      411.922 $nm$  &   0.299189  $nm$  \\
+C                     &      2.27282   &   0.0092999 \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Results of fit to the TPB wavelength shifter spectrum.}
+\end{table}
+
+\begin{multline}
+  f (\lambda | A, \alpha, \sigma_1 , \mu_{1} , \sigma_{2} , \mu_{2}, C ) =\\
+  C \times \left(
+  A \frac{\alpha}{2} e^{ \frac{\alpha}{2} ( 2 \mu_{1} +\alpha \sigma_{1}^{2} - 2 \lambda) }
+  \times  erfc\left( \frac{\mu_{1} + \alpha \sigma_{1}^{2} - \lambda}{\sqrt{2} \sigma_{1}} \right)
+  + \frac{(1 - A)}{\sqrt{2 \sigma_{2}^{2}\pi} }  e^{\frac{-(\lambda -mu_{2})^{2}}{2 \sigma_{2}^{2}}}
+  \right)
+  \label{equ:wls}
+\end{multline}
+
+\section{Software}
+\subsection{physics configuration}
+
+"$FTFP_BERT+OPTICAL+STEPLIMIT$"
+refeence physics list
+optical physics constructor
+steplimit constructor
+neutron killer 
+\begin{verbatim}
+
+  G4OpticalParameters::Instance()->SetProcessActivation("Cerenkov", true);
+  G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", true);
+  G4OpticalParameters::Instance()->SetScintFiniteRiseTime(false);
+  G4OpticalParameters::Instance()->SetProcessActivation("OpAbsorption", true);
+  G4OpticalParameters::Instance()->SetProcessActivation("OpRayleigh", true);
+  G4OpticalParameters::Instance()->SetProcessActivation("OpMieHG", false);
+  G4OpticalParameters::Instance()->SetProcessActivation("OpWLS", true);
+  G4OpticalParameters::Instance()->SetProcessActivation("OpWLS2", false);
+  G4OpticalParameters::Instance()->SetCerenkovStackPhotons(false);
+  G4OpticalParameters::Instance()->SetScintStackPhotons(false);
+  G4OpticalParameters::Instance()->SetScintTrackSecondariesFirst(
+    true);  // only relevant if we actually stack and trace the optical photons
+  G4OpticalParameters::Instance()->SetCerenkovTrackSecondariesFirst(
+    true);  // only relevant if we actually stack and trace the optical photons
+  G4OpticalParameters::Instance()->SetCerenkovMaxPhotonsPerStep(100);
+  G4OpticalParameters::Instance()->SetCerenkovMaxBetaChange(10.0);
+  G4OpticalParameters::Instance()->SetWLSTimeProfile("exponential");
+  G4OpticalParameters::Instance()->SetWLS2TimeProfile("exponential");
+
+\end{verbatim}
+
+\clearpage
+\subsection{Sensitive Detector PhotonSD and PhotonHit}
+The sensitive detector for optical photons is PhotonSD which produces PhotonHits. It registers the properties of every photon that reaches the sensitive volume and then kills the optical photon.
+The photon properties that are collected are listed in Table~\ref{tab:table5}. Note that properties like quantum efficiency, geometrical fill factor etc. are regarded as detector response and are not
+included in the simulation. 
+ \begin{table}[h!]
+  \begin{center}
+    \label{tab:table5}
+    \begin{tabular}{|l|l|} 
+      \hline
+      \textbf{ name } & \textbf{meaning } \\
+      \hline
+      unsigned int fid  & Detector ID of the Photodetector\\
+      unsigned int fpid & ID of Process that produced the photon\\
+                        & (Scintillation, Cerenkov, WLS)\\
+      G4double fwavelength & wavelength of photon in nm\\
+      G4double ftime & arrival time at photon at detector surface\\
+      G4ThreeVector fposition & global position where photon hits the detector\\
+      G4ThreeVector fdirection & direction of photon\\
+      G4ThreeVector fpolarization & polarization of photon\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Data members of the PhotonHit class.}
+ \end{table}
+
+ 
 \section{Conclusions and Outlook}
 \clearpage
  \section*{References}
 
  \begin{thebibliography}{99}
     \bibitem{ref:geant4}
-   Instruments and Methods in Physics Research A 506 (2003) 250-303,  IEEE Transactions on Nuclear Science 53 No. 1 (2006) 270-278 and Nuclear Instruments and Methods in Physics Research A 835 (2016) 186-225
-
+      Instruments and Methods in Physics Research A 506 (2003) 250-303, \\
+      IEEE Transactions on Nuclear Science 53 No. 1 (2006) 270-278, \\
+      Nuclear Instruments and Methods in Physics Research A 835 (2016) 186-225,\\
+      \verb|http://geant.cern.ch/|.
+      \bibitem{ref:opticks}
+ Simon Blyth, {\it Opticks : GPU Optical Photon Simulation for Particle Physics using NVIDIA® OptiX$^{TM}$},
+EPJ Web of Conferences 214, 02027 (2019).\\
+  \verb| https://bitbucket.org/simoncblyth/opticks|.
  \bibitem{ref:LArProperties}
    \verb|https://github.com/hanswenzel/LArProperties|.
  \bibitem{ref:CaTS}
    \verb|https://github.com/hanswenzel/CaTS|.
 %\bibitem{ref:Geant4-4}
 % Allison J et al. 2016, {\it Nuclear Instruments and Methods in Physics
-%   Research A} {\bf 835} (186--225).
+   %   Research A} {\bf 835} (186--225).
+\bibitem{ref:peculiar}   
+Erik Dietz-Laursonn, {\it Peculiarities in the Simulation of Optical Physics with Geant4},  	arXiv:1612.05162.
 
-\bibitem{ref:opticks}
- Simon Blyth, {\it Opticks : GPU Optical Photon Simulation for Particle Physics using NVIDIA® OptiX$^{TM}$},
-EPJ Web of Conferences 214, 02027 (2019).\\
-  \verb| https://bitbucket.org/simoncblyth/opticks|.
 \bibitem{ref:Sinnock}
  A. C. Sinnock, B. L. Smith, {\it Refractive indices of the condensed inert gases}, Phys. Rev. 181 (1969) (1297-1307).
- 
-\bibitem{ref:Geant4}
- \verb|http://geant.cern.ch/|.
 \bibitem{ref:inspire} High-Energy Physics Literature Database,
   \verb"http://inspirehep.net"/.
 \bibitem{ref:scripts}  
@@ -392,7 +614,17 @@ P.A. Zyla et al. (Particle Data Group), Prog. Theor. Exp. Phys. 2020, 083C01 (20
 \bibitem{ref:wikipedia}
   \verb|https://en.wikipedia.org/wiki/Cherenkov_radiation|
 \bibitem{ref:nest}
+  Szydagis, M. et al. {\it Noble Element Simulation Technique}
   \verb|https://nest.physics.ucdavis.edu/|.
+
+\bibitem{ref:ettore}
+  Ettore Segreto, {\it Properties of Liquid Argon Scintillation Light Emission}
+  \verb|arXiv:2012.06527|
+\bibitem{ref:seidel}
+  G. Seidel, R. Lanou, W. Yao,{\it  Rayleigh scattering in rare-gas liquids}, Nuclear Instruments and Meth-
+ods in Physics Research Section A: Accelerators, Spectrometers, Detectors and Associated Equipment
+489 (13) (2002) 189 – 194.
+  
 \end{thebibliography}
 
 \end{document}

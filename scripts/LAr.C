@@ -26,6 +26,7 @@
 #include "math.h"
 #include <iostream>
 #include "TGraph.h"
+#include "TGraphErrors.h"
 #include "TCanvas.h"
 #include "TLegend.h"
 #include "TMultiGraph.h"
@@ -57,6 +58,8 @@ const double alngth = 66.;           // LAr attenuation length in cm at 128 nm
 // Spectrometers, Detectors and Associated Equipment 384 (23) (1997) 380 - 386.
 // refractive index at triple point LAr from 
 // A. C. Sinnock, B. L. Smith, Refractive indices of the condensed inert gases, Phys. Rev. 181 (1969) 1297-1307.
+//
+// 
 const Int_t nr = 9;
 const Double_t Lambda[nr] = {361.2,
     365.0,
@@ -76,6 +79,17 @@ const Double_t R[nr] = {1.2395,
     1.2334,
     1.2328,
     1.2321};
+
+// at 128 nm the refraction index has been measure by:
+// A measurement of the group velocity of scintillation light in liquid argon,
+//  M. Babicz et al, 2020 JINST 15 P09009
+const Int_t nrb = 1;
+const Double_t Lambdab[nrb] = {128};
+const Double_t Rb[nrb] = {1.358};
+const Double_t Rberr[nrb] = {0.003};
+const Double_t Lambdaberr[nrb] = {0.0};
+
+
 // Liquid Argon 
 // sellmeier coefficient from arXiv:1502.04213
 // for different temperatures T
@@ -206,6 +220,14 @@ void sellmeierLAr(double emin = 110, double emax = 700) {
     ve->SetMarkerStyle(22);
     ve->SetMarkerSize(2);
     ve->Draw("PL");
+    //
+    TGraph *vb = new TGraphErrors(nrb, Lambdab, Rb,Lambdaberr,Rberr);
+    vb-> SetTitle("Babicz et al");
+    vb->SetLineColor(3);
+    vb->SetMarkerColor(3);
+    vb->SetMarkerStyle(23);
+    vb->SetMarkerSize(2);
+    vb->Draw("PL");
     TLegend *leg = canvas2->BuildLegend(.7, .65, 0.85, .85);
     leg->Draw();
 }

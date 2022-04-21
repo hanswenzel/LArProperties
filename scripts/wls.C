@@ -30,7 +30,8 @@ double etolambda(double E) {
 Double_t myfunction(Double_t *x, Double_t *par) {
     Float_t xx = x[0];
     double f = 0.5 * par[0] * par[1] * exp(0.5 * par[1]*(2. * par[3] + par[1] * par[2] * par[2] - 2 * xx)) * TMath::Erfc((par[3] + par[1] * par[2] * par[2] - xx) / (sqrt(2) * par[2]))
-            + (1 - par[0]) / sqrt(2. * par[4] * par[4] * M_PI) * exp((-1.0 * (xx - par[5])*(xx - par[5])) / (2. * par[4] * par[4]));
+      +( (1 - par[0]) / sqrt(2. * par[4] * par[4] * M_PI)) * exp((-1.0 * (xx - par[5])*(xx - par[5])) / (2. * par[4] * par[4]));
+    f= f*par[6];
     return f;
 }
 
@@ -41,6 +42,11 @@ void wls() {
     double mu1 = 418.1;
     double sig2 = 9.72;
     double mu2 = 411.2;
+    double Const = 10;
+    TCanvas *c1 = new TCanvas("c1","Emission spectrum",200,10,700,500);
+    c1->SetGridx();
+    c1->SetGridy();
+
     TGraph* tg1 = new TGraph("FitReemissionSpect.csv", "%lf,%lf");
     tg1->SetLineWidth(2);
     tg1->SetLineColor(2);
@@ -49,14 +55,15 @@ void wls() {
     tg1->SetMinimum(0.);
     tg1->Draw();
     cout <<tg1->Eval(420)<<endl;
-    /*
-    TF1 *f1 = new TF1("myfunc", myfunction, 370., 560., 6);
-    f1->SetParameters(A, alpha, sig1, mu1, sig2, mu1);
-    f1->SetParNames("A", "alpha", "sig1", "mu1", "sig2", "mu2");
+    
+    TF1 *f1 = new TF1("myfunc", myfunction, 370., 560., 7);
+    f1->SetLineColor(4);
+    f1->SetParameters(A, alpha, sig1, mu1, sig2, mu1,Const);
+    f1->SetParNames("A", "alpha", "sig1", "mu1", "sig2", "mu2","Const");
     //f1->Draw("SAME");
-    tg1->Fit("f1");
+    tg1->Fit("myfunc");
     f1->Draw("SAME");
-    */
+    c1->Update();
 }
 //----------------------------------------------------------------------
 // function prints out the WLS emmission spectrum  in the geant 4 gdml format
