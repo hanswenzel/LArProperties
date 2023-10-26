@@ -14,15 +14,16 @@
 // root [5] rayleigh(125,130);              // plot rayleigh length between 110 and 400 nm
 //
 // to print out a table that can be cut and paste into the Geant4 gdml description:
-// root [6] rindextable();                   // refraction index between 110 and 700 nm in nsteps=500 for T=83.81 K
+// root [6] rindextable();                   // refraction index between 110 and 700 nm in nsteps=200 for T=83.81 K
 // root [7] rindextable(200,300,10,3);       // refraction index between 200 and 300 nm in nsteps=10 for T=90 K
-// root [8] rayleightable();                 // rayleigh length between 110 and 700 nm in nsteps=100 for T=83.81 K
+// root [8] rayleightable();                 // rayleigh length between 110 and 700 nm in nsteps=200 for T=83.81 K
 // root [9] rayleightable(200,300,10,3);     // rayleigh length between 200 and 300 nm in nsteps=10 for T=90 K
 //
 // scintillation emmission spectrum 
 // root [3] spectrum()                       // plot emission spectrum as a function of lambda between 100 and 160 nm in nsteps = 100 
 // root [4] spectrumE()                      // plot emission spectrum as a function of energy between 100 and 160 nm in nsteps = 100 
 // root     spectrumtable()                  // emission spectrum between 110 and 160 in nsteps = 100 
+// root const_abslengthtable()               // absorption lenth between 110 and 700 nm in 200 steps
 //------------------------------------------------------------------------------------------------------------------
 #include "math.h"
 #include <iostream>
@@ -447,8 +448,8 @@ void const_rayleightable(double emin = 110, double emax = 700, int nsteps = 100,
 // nsteps number of steps
 //----------------------------------------------------------------------
 
-void const_abslengthtable(double emin = 110, double emax = 700, int nsteps = 100, int index = 0) {
-    const double minlambda = 100;
+void const_abslengthtable(double emin = 110, double emax = 700, int nsteps = 200, int index = 0) {
+    const double minlambda = 110;
     const double maxlambda = 700;
     if (emin < minlambda || emax > maxlambda) {
         cout << " variables out of range: " << minlambda << " - " << maxlambda << endl;
