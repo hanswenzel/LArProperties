@@ -11,6 +11,7 @@
 #include <TAxis.h>
 #include <TFrame.h>
 #include <TFile.h>
+#include <TF1.h>
 #include <TMultiGraph.h>
 #include <TGraphErrors.h>
 #include <TLegend.h>
@@ -113,8 +114,8 @@ Double_t ceren(Double_t *x, Double_t *par) {
     double n = wtrindex2(lambda);
     const double alpha = 7.2973525664E-3;
     double photons=0.0;
-    double min=  299.768;
-    double max=  609.558;
+    double min=  100.;
+    double max=  700;
     if (lambda<max&&lambda>min)
       {
 	photons=(1 - 1./(beta * beta * n * n)) *(2. * M_PI * alpha * z * z) / (lambda*lambda);
@@ -157,7 +158,7 @@ void Cerenkov() {
   //c1->SetLogx();
   c1->SetLogy();
   TF1 *f1 = new TF1("ceren", ceren, 100,700, 2);
-  f1->SetTitle("Cerenkov photons;#lambda [nm];Nr of Photons");
+  f1->SetTitle(";#lambda [nm];Arbitrary Units");
   f1->SetParameters(1,1);
   f1->SetParNames("z", "beta");
   f1->Draw();
