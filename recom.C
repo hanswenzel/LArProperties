@@ -51,17 +51,15 @@ double birks2D(Double_t *x,Double_t *p)  {
   Double_t R = A/(1+(K*x[1])/(rho*x[0]));
   return R;
 }
-/*
-double rbox2D(double x)  {
+
+double rbox2D(Double_t *x,Double_t *p)  {
   const double alpha = 0.93;
   const double beta = 0.207;
   const double rho = 1.396;
-  double ED = 0.5; 
-  double dEdx  = x;
-  double rb= TMath::Log(alpha + beta/(rho*ED) * dEdx)/( beta/(rho*ED) * dEdx);
+  double rb= TMath::Log(alpha + beta/(rho*x[0]) * x[1])/( beta/(rho*x[0]) * x[1]);
   return rb;
 }
-*/
+
 
 void recom()
 {
@@ -136,18 +134,19 @@ void recom2D()
 {
  TCanvas *canvas3 = new TCanvas("canvas3", "recombination factors", 200, 10, 1000, 800);
  //canvas3->SetGrid();
- TF2 *bi2D  = new TF2("birks2D","birks2d(x)",0,1.,0,10.);
- /*
- bi2D->SetNpx(500);
+ TF2 *bi2D  = new TF2("birks2D",birks2D,0,1.,0,10.);
  
- bi2D->SetLineWidth(4);
- bi2D->SetLineColor(4);
- bi2D->GetXaxis()->SetTitle("dE/dx [MeV/cm]");
- bi2D->GetYaxis()->SetTitle("R= Q/Q_{0}");
- bi2D->SetMinimum(0.);
+ //bi2D->SetNpx(500);
+ 
+ // bi2D->SetLineWidth(4);
+ //bi2D->SetLineColor(4);
+ bi2D->GetXaxis()->SetTitle("EDrift [kV/cm]");
+ bi2D->GetXaxis()->SetTitleOffset(1.6);
+ bi2D->GetYaxis()->SetTitle("dE/dx [MeV/cm]");
+ //bi2D->SetMinimum(0.);
  bi2D->SetTitle("");
+  bi2D->SetMaximum(0.);
  bi2D->SetMaximum(1.);
- */
  bi2D->Draw("surf1"); 
  /* TF1 *frbox1  = new TF1("rbox1","rbox1(x)",0,10.);
  frbox1->SetNpx(500);
@@ -161,12 +160,54 @@ void recom2D()
 
  frbox1->Draw("SAME");
  */
- TLegend *leg = canvas3->BuildLegend(.7, .15, 0.85, .35);
+ TLegend *leg = canvas3->BuildLegend(.7, .3, 0.85, .4);
  leg->Draw();
- TText *t = new TText(1,.1,"ED =0.5 kV/cm");
+ 
+ //TText *t = new TText(1,.1,"ED =0.5 kV/cm");
  //t->SetTextAlign(22);
  //t->SetTextColor(kRed+2);
- t->SetTextFont(43);
- t->SetTextSize(40);
- t->Draw();
+ //t->SetTextFont(43);
+ //t->SetTextSize(40);
+ //t->Draw();
+
+}
+void box2D()
+{
+ TCanvas *canvas4 = new TCanvas("canvas4", "recombination factors", 200, 10, 1000, 800);
+ //canvas3->SetGrid();
+ TF2 *box2D  = new TF2("rbox2D",rbox2D,0,1.,0,10.);
+ 
+ //box2D->SetNpx(500);
+ 
+ // box2D->SetLineWidth(4);
+ //box2D->SetLineColor(4);
+ box2D->GetXaxis()->SetTitle("EDrift [kV/cm]");
+ box2D->GetXaxis()->SetTitleOffset(1.6);
+ box2D->GetYaxis()->SetTitle("dE/dx [MeV/cm]");
+ box2D->SetMinimum(0.);
+ box2D->SetTitle("");
+ box2D->SetMaximum(1.);
+ box2D->Draw("surf1"); 
+ /* TF1 *frbox1  = new TF1("rbox1","rbox1(x)",0,10.);
+ frbox1->SetNpx(500);
+ frbox1->SetLineWidth(4);
+ frbox1->SetLineColor(2);
+ frbox1->GetXaxis()->SetTitle("dE/dx [MeV/cm]");
+ frbox1->GetYaxis()->SetTitle("R= Q/Q_{0}");
+ frbox1->SetMinimum(0.);
+ frbox1->SetTitle("");
+ frbox1->SetMaximum(1.);
+
+ frbox1->Draw("SAME");
+ */
+ TLegend *leg = canvas4->BuildLegend(.7, .3, 0.85, .4);
+ leg->Draw();
+ 
+ //TText *t = new TText(1,.1,"ED =0.5 kV/cm");
+ //t->SetTextAlign(22);
+ //t->SetTextColor(kRed+2);
+ //t->SetTextFont(43);
+ //t->SetTextSize(40);
+ //t->Draw();
+
 }
