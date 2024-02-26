@@ -50,11 +50,31 @@ double sellmeier_LAr(double *x, double *p) {
     //    cout <<"x[0]:  "<<x[0]<<" la0: " <<la0<<" laUV:  "<<laUV<<" laIR:  "<<laIR<< endl;
     double lambda = x[0]*1e-7; // convert from nm to cm
     double nsquare = la0
-            + (laUV * lambda * lambda) / (lambda * lambda - lambdaUV * lambdaUV)
+            +(laUV * lambda * lambda) / (lambda * lambda - lambdaUV * lambdaUV)
             +(laIR * lambda * lambda) / (lambda * lambda - lambdaIR * lambdaIR);
     return sqrt(nsquare);
 }
-
+double groupvelocity(double *x, double *p) {
+    double la0  = p[0];
+    double laUV = p[1];
+    double laIR = p[2];
+    double lUV  = p[3];
+    double lIR  = p[4];
+    //
+    //    cout <<"x[0]:  "<<x[0]<<" la0: " <<la0<<" laUV:  "<<laUV<<" laIR:  "<<laIR<< endl;
+    double lambda = x[0]*1e-7; // convert from nm to cm
+    double nsquare = la0
+      +(laUV * lambda * lambda) / (lambda * lambda - lUV * lUV)
+      +(laIR * lambda * lambda) / (lambda * lambda - lIR * lIR);
+    
+    double vg =sqrt(nsquare)
+      +lambda/sqrt(nsquare)* 
+	 ( laUV*lUV*lUV*lambda/ ((lambda * lambda - lUV * lUV)*(lambda * lambda - lUV * lUV))+
+	   laIR*lIR*lIR*lambda/ ((lambda * lambda - lIR * lIR)*(lambda * lambda - lIR * lIR))
+	   );
+	 
+    return vg;
+}
 
 double sellmeierpe_LAr(double * x, double *p) {
     double la0 = p[0];
@@ -100,7 +120,11 @@ int main()
     double p[3]={1.24262,0.26825,0.00047342};
     double x[1];
     x[0]=300.;
-        cout <<"x[0]:  "<<x[0]<<" la0: " <<p[0]<<" laUV:  "<<p[1]<<" laIR:  "<<p[2]<< endl;
+    //  cout <<"x[0]:  "<<x[0]<<" la0: " <<p[0]<<" laUV:  "<<p[1]<<" laIR:  "<<p[2]<< endl;
     cout << invokeit(x,p ,&sellmeier_LAr) << '\n';
+    double par[5]={1.24262,0.26825,0.00047342,106.6 * 1e-7,908.3 * 1e-7};
+    double xx[1];
+    xx[0]=150.;
+    cout << "group velocity:  "<<invokeit(xx,par ,&groupvelocity) << '\n';
     return 0;
 }
