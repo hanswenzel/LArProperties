@@ -72,6 +72,7 @@ double groupvelocity(double *x, double *p) {
 	 ( laUV*lUV*lUV*lambda/ ((lambda * lambda - lUV * lUV)*(lambda * lambda - lUV * lUV))+
 	   laIR*lIR*lIR*lambda/ ((lambda * lambda - lIR * lIR)*(lambda * lambda - lIR * lIR))
 	   );
+    vg=1./vg;
 	 
     return vg;
 }
@@ -126,5 +127,12 @@ int main()
     double xx[1];
     xx[0]=150.;
     cout << "group velocity:  "<<invokeit(xx,par ,&groupvelocity) << '\n';
+    for (int i = 0;i<10;i++)
+      {
+	double energy = 2.0 +i;
+	xx[0]=etolambda(energy);
+	cout << "energy:  "<< energy << "  group velocity:  "<<invokeit(xx,par ,&groupvelocity) << '\n';
+      }
+
     return 0;
 }
