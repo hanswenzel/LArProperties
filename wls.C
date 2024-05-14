@@ -72,7 +72,7 @@ void wls() {
 // index of Temperature Array
 //----------------------------------------------------------------------
 
-void wlstable(double emin = 370, double emax = 560, int nsteps = 100) {
+void Emmissiontable(double emin = 370, double emax = 560, int nsteps = 100) {
     const double minlambda = 360;
     const double maxlambda = 570;
     if (emin < minlambda || emax > maxlambda) {
@@ -83,12 +83,27 @@ void wlstable(double emin = 370, double emax = 560, int nsteps = 100) {
     double stepsize = (emax - emin) / nsteps;
     double pe = emax;
     double photone = lambdatoe(pe);
-    cout << "     <matrix name=\"EMISSION\" coldim=\"2\" values=\"" << endl;
+    cout << "     <matrix name=\"TPBEMISSION\" coldim=\"2\" values=\"" << endl;
     for (int i = 1; i < nsteps; i++) {
         pe = emax - i*stepsize;
         photone = lambdatoe(pe);     // Photon energy in eV
 	tg1->Eval(pe);
-        cout << photone << "*eV "<<tg1->Eval(pe) << endl;
+        cout << photone << "*eV "<<tg1->Eval(pe) << " ";
     }  
     cout <<  "\"/>" << endl;
 }
+
+void ABS2table() {
+    const int N = 100;
+    double energy[N];
+    double intensity[N];
+    double emin = lambdatoe(160.);
+    double emax = lambdatoe(110.);
+    double estep = (emax - emin)* 0.01;
+    cout << " <matrix name=\"TPBABS2\" coldim=\"2\" values=\"";
+    for (int i = 0; i < N - 1; i++) {
+        cout <<emin + estep * i << "*eV 0.4*mm ";
+    }
+    cout << emin + estep * (N - 1) << "*eV 0.4*mm \"/>" << endl;
+}
+
