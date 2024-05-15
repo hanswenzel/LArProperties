@@ -106,4 +106,28 @@ void ABS2table() {
     }
     cout << emin + estep * (N - 1) << "*eV 0.4*mm \"/>" << endl;
 }
-
+//
+// the refractive index of TPB has been measure to be 1.618 we assume this value for the entire spectrum
+// since we don't have the Sellmeier coefficient of TPB. The precise shape should matter we just need to be able
+// to propagate optical photons in a thin layer of TPB.
+//
+void rindextable(double emin = 110, double emax = 700, int nsteps = 500, int index = 0) {
+    const double minlambda = 100;
+    const double maxlambda = 700;
+    if (emin < minlambda || emax > maxlambda) {
+        cout << " variables out of range: " << minlambda << " - " << maxlambda << endl;
+        return;
+    }
+    double stepsize = (emax - emin) / nsteps;
+    double pe = emax;
+    double photone = lambdatoe(pe);
+    cout << "     <matrix name=\"TPBRINDEX\" coldim=\"2\" values=\"" << photone << "*eV 1.618 " << endl;
+    for (int i = 1; i < nsteps - 1; i++) {
+        pe = emax - i*stepsize;
+	photone = lambdatoe(pe);
+        cout << photone << "*eV 1.618 ";
+    }
+    pe = emax - (nsteps - 1) * stepsize;
+    photone = lambdatoe(pe);
+    cout << photone << "*eV 1.618 \"/>" << endl;
+}

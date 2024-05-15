@@ -358,7 +358,7 @@ void rindextable(double emin = 110, double emax = 700, int nsteps = 500, int ind
         pe = emax - i*stepsize;
         n = sellmeier_LAr(pe, index);
         photone = lambdatoe(pe);
-        cout << photone << "*eV " << n << endl;
+        cout << photone << "*eV " << n << " ";
     }
     pe = emax - (nsteps - 1) * stepsize;
     n = sellmeier_LAr(pe, index);
