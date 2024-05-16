@@ -124,7 +124,7 @@ void rindextable(double emin = 110, double emax = 700, int nsteps = 500, int ind
     double stepsize = (emax - emin) / nsteps;
     double pe = emax;
     double photone = lambdatoe(pe);
-    cout << "     <matrix name=\"TPBRINDEX\" coldim=\"2\" values=\"" << photone << "*eV 1.618 " << endl;
+    cout << "     <matrix name=\"RINDEXTPB\" coldim=\"2\" values=\"" << photone << "*eV 1.618 " << endl;
     for (int i = 1; i < nsteps - 1; i++) {
         pe = emax - i*stepsize;
 	photone = lambdatoe(pe);
