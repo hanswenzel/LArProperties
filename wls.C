@@ -83,14 +83,17 @@ void Emmissiontable(double emin = 370, double emax = 560, int nsteps = 100) {
     double stepsize = (emax - emin) / nsteps;
     double pe = emax;
     double photone = lambdatoe(pe);
-    cout << "     <matrix name=\"TPBEMISSION\" coldim=\"2\" values=\"" << endl;
-    for (int i = 1; i < nsteps; i++) {
+    cout << "     <matrix name=\"EMISSIONTPB\" coldim=\"2\" values=\"" << endl;
+    for (int i = 1; i < nsteps-1; i++) {
         pe = emax - i*stepsize;
         photone = lambdatoe(pe);     // Photon energy in eV
 	tg1->Eval(pe);
-        cout << photone << "*eV "<<tg1->Eval(pe) << " ";
-    }  
-    cout <<  "\"/>" << endl;
+        cout << photone << "*eV "<<tg1->Eval(pe)<<" ";
+    }
+    pe = emax - (nsteps-1)*stepsize;
+    photone = lambdatoe(pe);     // Photon energy in eV
+    tg1->Eval(pe);
+    cout << photone << "*eV "<<tg1->Eval(pe)<< "\"/>" << endl;
 }
 
 void ABS2table() {
@@ -100,11 +103,11 @@ void ABS2table() {
     double emin = lambdatoe(160.);
     double emax = lambdatoe(110.);
     double estep = (emax - emin)* 0.01;
-    cout << " <matrix name=\"TPBABS2\" coldim=\"2\" values=\"";
+    cout << " <matrix name=\"ABS2TPB\" coldim=\"2\" values=\"";
     for (int i = 0; i < N - 1; i++) {
-        cout <<emin + estep * i << "*eV 0.4*mm ";
+        cout <<emin + estep * i << "*eV 0.4*nm ";
     }
-    cout << emin + estep * (N - 1) << "*eV 0.4*mm \"/>" << endl;
+    cout << emin + estep * (N - 1) << "*eV 0.4*nm\"/>" << endl;
 }
 //
 // the refractive index of TPB has been measure to be 1.618 we assume this value for the entire spectrum
@@ -129,5 +132,5 @@ void rindextable(double emin = 110, double emax = 700, int nsteps = 500, int ind
     }
     pe = emax - (nsteps - 1) * stepsize;
     photone = lambdatoe(pe);
-    cout << photone << "*eV 1.618 \"/>" << endl;
+    cout << photone << "*eV 1.618\"/>" << endl;
 }
