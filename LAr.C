@@ -323,12 +323,12 @@ void rayleightable(double emin = 110, double emax = 700, int nsteps = 500, int i
     double pe = emax;
     double n = lrayleigh(pe, index);
     double photone = lambdatoe(pe);
-    cout << "     <matrix name=\"RAYLEIGH\" coldim=\"2\" values=\"" << photone << "*eV " << n << "*cm" << endl;
+    cout << "     <matrix name=\"RAYLEIGH\" coldim=\"2\" values=\"" << photone << "*eV " << n << "*cm ";
     for (int i = 1; i < nsteps - 1; i++) {
         pe = emax - i*stepsize;
         n = lrayleigh(pe, index);
         photone = lambdatoe(pe);
-        cout << photone << "*eV " << n << "*cm" << endl;
+        cout << photone << "*eV " << n << "*cm ";
     }
     pe = emax - (nsteps - 1) * stepsize;
     n = lrayleigh(pe, index);
@@ -407,7 +407,7 @@ void spectrumtable() {
     double estep = (emax - emin)* 0.01;
     cout << " <matrix name=\"SCINTLAR\" coldim=\"2\" values=\"";
     for (int i = 0; i < N - 1; i++) {
-        cout <<"       "<< emin + estep * i << "*eV " << TMath::Gaus(etolambda(emin + estep * i), 128, 10, true) << endl;
+        cout <<emin + estep * i << "*eV " << TMath::Gaus(etolambda(emin + estep * i), 128, 10, true) << " ";
     }
     cout << emin + estep * (N - 1) << "*eV " << TMath::Gaus(etolambda(emin + estep * (N - 1)), 128, 10, true) << "\"/>" << endl;
 }
